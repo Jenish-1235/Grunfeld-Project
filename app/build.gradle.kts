@@ -1,6 +1,8 @@
+import java.util.Properties
+
 plugins ***REMOVED***
     alias(libs.plugins.android.application)
-    alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.kotlin.android) version "2.1.0"
 ***REMOVED***
 
 android ***REMOVED***
@@ -15,6 +17,12 @@ android ***REMOVED***
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        val properties = Properties().apply ***REMOVED***
+            load(rootProject.file("local.properties").inputStream())
+***REMOVED***
+        buildConfigField("String", "BASE_URL", "\"$***REMOVED***properties.getProperty("supabase.url")***REMOVED***\"")
+        buildConfigField("String", "ANON_KEY", "\"$***REMOVED***properties.getProperty("supabase.anon.key")***REMOVED***\"")
+
 ***REMOVED***
 
     buildTypes ***REMOVED***
@@ -33,6 +41,9 @@ android ***REMOVED***
     kotlinOptions ***REMOVED***
         jvmTarget = "11"
 ***REMOVED***
+    buildFeatures ***REMOVED***
+        buildConfig = true
+***REMOVED***
 ***REMOVED***
 
 dependencies ***REMOVED***
@@ -45,4 +56,7 @@ dependencies ***REMOVED***
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+    implementation(platform("io.github.jan-tennert.supabase:bom:3.1.1"))
+    implementation("io.github.jan-tennert.supabase:postgrest-kt")
+    implementation("io.ktor:ktor-client-android:3.0.3")
 ***REMOVED***
