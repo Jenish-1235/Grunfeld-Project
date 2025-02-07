@@ -64,7 +64,7 @@
                 android:id="@+id/nameInput"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Name"
+                android:textColor="@color/white"
                 android:inputType="textPersonName" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -95,7 +95,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:backgroundTint="#252525"
-                android:inputType="numberPassword"
+                android:inputType="number"
+                android:textColor="@color/white"
                 android:maxLength="5" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -132,7 +133,8 @@
                 android:paddingStart="17dp"
                 android:paddingTop="17dp"
                 android:paddingEnd="17dp"
-                android:paddingBottom="17dp" />
+                android:paddingBottom="17dp"
+                android:textColor="@color/white"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <FrameLayout
