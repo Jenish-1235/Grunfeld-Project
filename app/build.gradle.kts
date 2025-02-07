@@ -4,6 +4,7 @@ plugins ***REMOVED***
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android) version "2.1.0"
     kotlin("plugin.serialization") version "1.8.20"
+    id("kotlin-kapt")
 ***REMOVED***
 
 android ***REMOVED***
@@ -56,9 +57,16 @@ dependencies ***REMOVED***
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
-
+    implementation("com.squareup.picasso:picasso:2.8")
     implementation(platform("io.github.jan-tennert.supabase:bom:3.1.1"))
     implementation("io.github.jan-tennert.supabase:postgrest-kt")
     implementation("io.ktor:ktor-client-android:3.0.3")
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.0")
+    implementation("com.github.bumptech.glide:glide:4.15.1") // Or latest
+    annotationProcessor("com.github.bumptech.glide:compiler:4.15.1")
+    implementation("com.squareup.retrofit2:retrofit:2.9.0") // Or latest
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0") // Or latest
+    implementation("com.squareup.okhttp3:logging-interceptor:4.9.0") // For debugging (optional but recommended)
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4") // Or latest for coroutines
+    implementation ("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.1")
+
 ***REMOVED***
