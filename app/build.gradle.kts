@@ -3,6 +3,7 @@ import java.util.Properties
 plugins ***REMOVED***
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android) version "2.1.0"
+    kotlin("plugin.serialization") version "1.8.20"
 ***REMOVED***
 
 android ***REMOVED***
@@ -15,14 +16,13 @@ android ***REMOVED***
         targetSdk = 35
         versionCode = 1
         versionName = "1.0"
-
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
         val properties = Properties().apply ***REMOVED***
             load(rootProject.file("local.properties").inputStream())
 ***REMOVED***
         buildConfigField("String", "BASE_URL", "\"$***REMOVED***properties.getProperty("supabase.url")***REMOVED***\"")
         buildConfigField("String", "ANON_KEY", "\"$***REMOVED***properties.getProperty("supabase.anon.key")***REMOVED***\"")
-
 ***REMOVED***
 
     buildTypes ***REMOVED***
@@ -47,16 +47,18 @@ android ***REMOVED***
 ***REMOVED***
 
 dependencies ***REMOVED***
-
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
+    implementation(libs.firebase.firestore.ktx)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+
     implementation(platform("io.github.jan-tennert.supabase:bom:3.1.1"))
     implementation("io.github.jan-tennert.supabase:postgrest-kt")
     implementation("io.ktor:ktor-client-android:3.0.3")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.0")
 ***REMOVED***
