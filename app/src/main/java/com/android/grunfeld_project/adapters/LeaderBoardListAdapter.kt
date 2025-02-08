@@ -15,7 +15,7 @@ import com.android.grunfeld_project.models.User
 import com.bumptech.glide.Glide
 
 class LeaderBoardListAdapter(userList: List<User>): RecyclerView.Adapter<LeaderBoardListAdapter.LeaderBoardViewHolder>()***REMOVED***
-    val userList = userList
+    var userList = userList
     class LeaderBoardViewHolder(itemView: View): RecyclerView.ViewHolder(itemView)***REMOVED***
         val profileImage = itemView.findViewById<ImageView>(R.id.leaderBoardProfileImage)
         val displayName = itemView.findViewById<TextView>(R.id.displayNameView)
