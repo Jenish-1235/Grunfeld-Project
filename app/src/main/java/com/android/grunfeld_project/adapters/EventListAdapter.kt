@@ -27,9 +27,9 @@ class EventListAdapter(private val eventList: List<Event>) : RecyclerView.Adapte
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val event = eventList[position]
-        holder.eventTitleView.text = event.title
+        holder.eventTitleView.text = event.class_name
         holder.instructorView.text = event.instructor
         holder.timeView.text = event.time
-        holder.locationView.text = event.location
+        holder.locationView.text = event.room
     }
 }

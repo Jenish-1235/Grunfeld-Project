@@ -1,8 +1,11 @@
 package com.android.grunfeld_project.models
 
 data class Event(
-    val title: String,
+    val id: Int,
+    val class_name: String,
     val instructor: String,
     val time: String,
-    val location: String
+    val room: String,
+    val schedule_date: String,
+    val created_at: String
 )
