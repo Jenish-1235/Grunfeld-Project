@@ -15,6 +15,7 @@ class LeaderBoardFragment : Fragment() ***REMOVED***
         savedInstanceState: Bundle?
     ): View? ***REMOVED***
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_leader_board, container, false)
+        val view = inflater.inflate(R.layout.fragment_leader_board, container, false)
+        return view
 ***REMOVED***
 ***REMOVED***
