@@ -3,7 +3,13 @@
     <style name="Base.Theme.GrunfeldProject" parent="Theme.Material3.Light.NoActionBar">
         <!-- Customize your light theme here. -->
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+
     </style>
 
     <style name="Theme.GrunfeldProject" parent="Base.Theme.GrunfeldProject" />
+
+    <style name="SearchBarTextAppearance" parent="TextAppearance.AppCompat.Body1">
+        <item name="android:textColor">@color/white</item>
+        <!-- You can add more text-related attributes here if needed -->
+    </style>
 </resources>
