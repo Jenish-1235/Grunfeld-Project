@@ -112,10 +112,18 @@ class ScheduleFragment : Fragment() {
                 event.schedule_date == todayFormatted
             }
             if (initialFilteredEvents.isEmpty()) {
-                Toast.makeText(requireContext(), "No classes scheduled today", Toast.LENGTH_SHORT).show()
+                // show the most recent upcoming event
+                val mostRecentEvent = events.maxByOrNull { event ->
+                    LocalDate.parse(event.schedule_date, inputFormatter)
+                }
+                if (mostRecentEvent != null) {
+                    eventRecyclerView.adapter = EventListAdapter(listOf(mostRecentEvent))
+                    eventRecyclerView.layoutManager = LinearLayoutManager(requireContext())
+                }
+            }else {
+                eventRecyclerView.layoutManager = LinearLayoutManager(requireContext())
+                eventRecyclerView.adapter = EventListAdapter(initialFilteredEvents)
             }
-            eventRecyclerView.layoutManager = LinearLayoutManager(requireContext())
-            eventRecyclerView.adapter = EventListAdapter(initialFilteredEvents)
         }
         return view
     }
