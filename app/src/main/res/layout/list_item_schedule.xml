@@ -1,18 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="#151A21"
     app:cardCornerRadius="15dp"
-    android:layout_margin="10dp"
-    android:elevation="10dp">
+    android:layout_marginTop="7dp"
+    app:strokeColor="#374151"
+    app:strokeWidth="1dp"
+    app:cardBackgroundColor="#801F2937"
+    android:elevation="20dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:background="#151A21"
+        android:background="@android:drawable/screen_background_dark_transparent"
         android:padding="15dp">
 
         <TextView
@@ -21,8 +24,8 @@
             android:layout_height="match_parent"
             android:text="Title"
             android:textColor="@color/white"
-            android:textSize="22dp"
-            android:textStyle="bold"
+            android:textSize="24dp"
+            android:maxLength="20"
             android:layout_weight="1"/>
 
 
@@ -31,51 +34,54 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:text="Instructor"
-            android:textColor="@color/gray"
-            android:textSize="18dp"
-            android:textStyle="bold"
+            android:textColor="#9CA3AF"
             android:layout_weight="1"
-            android:gravity="start"
+            android:textSize="18dp"
+            android:maxLength="20"
+            android:gravity="start|center_vertical"
             android:drawablePadding="5dp"
-            android:layout_marginTop="3dp"
+            android:layout_marginTop="7dp"
             android:layout_marginBottom="3dp"
-            android:drawableStart="@drawable/ic_profile"/>
+            android:drawableStart="@drawable/ic_profile"
+            android:drawableTint="#9CA3AF"/>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:layout_marginTop="7dp">
 
             <TextView
                 android:id="@+id/timeView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:text="Time"
-                android:textColor="@color/gray"
-                android:textSize="18dp"
-                android:textStyle="bold"
+                android:textSize="16sp"
+                android:textColor="#9CA3AF"
                 android:layout_weight="1"
-                android:gravity="start"
+                android:gravity="start|center_vertical"
                 android:drawablePadding="5dp"
-                android:drawableStart="@drawable/ic_time"/>
+                android:maxLength="20"
+                android:drawableStart="@drawable/ic_time"
+                android:drawableTint="#9CA3AF"/>
 
             <TextView
                 android:id="@+id/locationView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:text="Location"
-                android:textColor="@color/gray"
-                android:textSize="18dp"
-                android:textStyle="bold"
+                android:textSize="16sp"
+                android:textColor="#9CA3AF"
+                android:gravity="end|center_vertical"
                 android:layout_weight="1"
-                android:textAlignment="textStart"
-                android:drawablePadding="5dp"
-                android:drawableStart="@drawable/ic_location"/>
-
+                android:drawablePadding="10dp"
+                android:maxLength="20"
+                android:drawableEnd="@drawable/ic_location"
+                android:drawableTint="#9CA3AF"/>
         </LinearLayout>
 
 
 
     </LinearLayout>
 
-</androidx.cardview.widget.CardView>
+</com.google.android.material.card.MaterialCardView>
