@@ -11,12 +11,12 @@
         android:id="@+id/cardView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp"
         android:background="@color/gray"
         app:cardCornerRadius="20dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_margin="10dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -26,13 +26,13 @@
 
             <ImageView
                 android:id="@+id/leaderBoardProfileImage"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"/>
 
             <TextView
                 android:id="@+id/displayNameView"
@@ -43,7 +43,8 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.025"
                 app:layout_constraintStart_toEndOf="@+id/leaderBoardProfileImage"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                android:textColor="@color/white"/>
 
 
             <TextView
@@ -52,20 +53,22 @@
                 android:layout_height="wrap_content"
                 android:text="Roll Number"
                 android:textSize="16dp"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.025"
                 app:layout_constraintStart_toEndOf="@+id/leaderBoardProfileImage"
-                app:layout_constraintTop_toBottomOf="@id/displayNameView" />
+                app:layout_constraintTop_toBottomOf="@id/displayNameView"
+                android:textColor="@color/gray"
+                android:textStyle="bold"/>
 
             <TextView
                 android:id="@+id/rankView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Rank"
+                android:textColor="@color/blue"
                 android:textSize="20dp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.9"
-                app:layout_constraintStart_toEndOf="@+id/displayNameView"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
@@ -73,10 +76,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="0 Points"
+                android:textColor="@color/white"
                 android:textSize="16dp"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.9"
-                app:layout_constraintStart_toEndOf="@+id/rollNumberView"
                 app:layout_constraintTop_toBottomOf="@id/rankView" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
