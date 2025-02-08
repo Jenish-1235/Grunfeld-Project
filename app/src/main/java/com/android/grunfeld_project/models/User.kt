@@ -1,8 +1,5 @@
 package com.android.grunfeld_project.models
 
-import kotlinx.serialization.Serializable
-
-@Serializable
 data class User(
     val id: String,              // UUID as a String
     val academic_year: String,   // e.g., "First Year"
