@@ -7,82 +7,80 @@
     tools:context=".fragments.LeaderBoardFragment"
     android:background="@color/black">
 
-    <androidx.cardview.widget.CardView
+    <androidx.cardview.widget.CardView xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/cardView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/gray"
-        app:cardCornerRadius="20dp"
+        app:cardCornerRadius="15dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_marginTop="5dp"
+        app:cardBackgroundColor="#111111"
         android:layout_margin="10dp">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="#111111"
-            android:padding="10dp">
+            android:orientation="horizontal"
+            android:padding="5dp"
+            android:layout_margin="5dp">
 
             <ImageView
-                android:id="@+id/leaderBoardProfileImage"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"/>
+                android:id="@+id/leaderBoardProfileImage"/>
 
-            <TextView
-                android:id="@+id/displayNameView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Display Name"
-                android:textSize="20dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.025"
-                app:layout_constraintStart_toEndOf="@+id/leaderBoardProfileImage"
-                app:layout_constraintTop_toTopOf="parent"
-                android:textColor="@color/white"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:layout_weight="1">
 
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:id="@+id/displayNameView"
+                    android:textColor="@color/white"
+                    android:paddingStart="3dp"/>
 
-            <TextView
-                android:id="@+id/rollNumberView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Roll Number"
-                android:textSize="16dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.025"
-                app:layout_constraintStart_toEndOf="@+id/leaderBoardProfileImage"
-                app:layout_constraintTop_toBottomOf="@id/displayNameView"
-                android:textColor="@color/gray"
-                android:textStyle="bold"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:id="@+id/rollNumberView"
+                    android:textColor="@color/gray"
+                    android:padding="3dp"/>
+            </LinearLayout>
 
-            <TextView
-                android:id="@+id/rankView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Rank"
-                android:textColor="@color/blue"
-                android:textSize="20dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:layout_weight="1.5">
 
-            <TextView
-                android:id="@+id/pointsView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="0 Points"
-                android:textColor="@color/white"
-                android:textSize="16dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/rankView" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:id="@+id/rankView"
+                    android:textColor="@color/blue"
+                    android:textAlignment="center"
+                    />
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:id="@+id/pointsView"
+                    android:textColor="@color/white"
+                    android:textAlignment="center"/>
+            </LinearLayout>
+        </LinearLayout>
 
     </androidx.cardview.widget.CardView>
 
