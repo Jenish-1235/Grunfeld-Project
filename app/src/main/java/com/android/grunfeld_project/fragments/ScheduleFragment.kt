@@ -1,5 +1,7 @@
 package com.android.grunfeld_project.fragments
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -113,7 +115,7 @@ class ScheduleFragment : Fragment() ***REMOVED***
     ***REMOVED***
             if (initialFilteredEvents.isEmpty()) ***REMOVED***
                 // show the most recent upcoming event
-                val mostRecentEvent = events.maxByOrNull ***REMOVED*** event ->
+                val mostRecentEvent = events.minByOrNull ***REMOVED*** event ->
                     LocalDate.parse(event.schedule_date, inputFormatter)
         ***REMOVED***
                 if (mostRecentEvent != null) ***REMOVED***
@@ -124,6 +126,13 @@ class ScheduleFragment : Fragment() ***REMOVED***
                 eventRecyclerView.layoutManager = LinearLayoutManager(requireContext())
                 eventRecyclerView.adapter = EventListAdapter(initialFilteredEvents)
     ***REMOVED***
+***REMOVED***
+
+        val pastClassesButton = view.findViewById<TextView>(R.id.pastClassesButton)
+        pastClassesButton.setOnClickListener ***REMOVED***
+            val youtube = "https://www.youtube.com/@grunfeldproject"
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(youtube))
+            startActivity(intent)
 ***REMOVED***
         return view
 ***REMOVED***
