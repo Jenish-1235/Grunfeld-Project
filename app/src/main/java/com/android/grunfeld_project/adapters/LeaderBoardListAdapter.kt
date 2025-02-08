@@ -46,10 +46,8 @@ class LeaderBoardListAdapter(userList: List<User>): RecyclerView.Adapter<LeaderB
             rank = "Trainee"
 ***REMOVED***else if (currentUser.points < 500)***REMOVED***
             rank = "Avenger"
-***REMOVED***else if(currentUser.points < 700)***REMOVED***
+***REMOVED***else if(currentUser.points < 1000)***REMOVED***
             rank = "Captain"
-***REMOVED***else if (currentUser.points < 1000)***REMOVED***
-            rank = "Legend"
 ***REMOVED***else if (currentUser.points >= 1000)***REMOVED***
             rank = "Director"
 ***REMOVED***

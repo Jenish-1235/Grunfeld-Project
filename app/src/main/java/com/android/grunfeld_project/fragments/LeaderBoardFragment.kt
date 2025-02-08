@@ -150,23 +150,16 @@ class LeaderBoardFragment : Fragment() ***REMOVED***
         val rollNumberString = fetchedUser[0].roll_number
         val pointsInt = fetchedUser[0].points
         var rank = ""
-        if (pointsInt != 0) ***REMOVED***
-            if (pointsInt < 200) ***REMOVED***
-                rank = "Trainee"
-    ***REMOVED***
-            if (pointsInt < 500) ***REMOVED***
-                rank = "Avenger"
-    ***REMOVED***
-            if (pointsInt < 700) ***REMOVED***
-                rank = "Captain"
-        ***REMOVED***
-            if (pointsInt < 1000) ***REMOVED***
-                rank = "Legend"
-    ***REMOVED***
-            if (pointsInt >= 1000) ***REMOVED***
-                rank = "Director"
-    ***REMOVED***
+        if (pointsInt < 200) ***REMOVED***
+            rank = "Trainee"
+***REMOVED***else if (pointsInt < 500) ***REMOVED***
+            rank = "Avenger"
+***REMOVED***else if (pointsInt < 1000) ***REMOVED***
+            rank = "Captain"
+***REMOVED***else if (pointsInt >= 1000) ***REMOVED***
+            rank = "Director"
 ***REMOVED***
+
 
         return arrayOf(githubProfileUrl, nameString, rollNumberString, rank, pointsInt)
 ***REMOVED***
