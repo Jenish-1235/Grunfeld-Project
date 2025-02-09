@@ -10,6 +10,7 @@ material = "1.12.0"
 activity = "1.10.0"
 constraintlayout = "2.2.0"
 firebaseFirestoreKtx = "25.1.2"
+firebaseMessagingKtx = "24.1.0"
 
 [libraries]
 androidx-core-ktx = ***REMOVED*** group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" ***REMOVED***
@@ -21,6 +22,7 @@ material = ***REMOVED*** group = "com.google.android.material", name = "material
 androidx-activity = ***REMOVED*** group = "androidx.activity", name = "activity", version.ref = "activity" ***REMOVED***
 androidx-constraintlayout = ***REMOVED*** group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" ***REMOVED***
 firebase-firestore-ktx = ***REMOVED*** group = "com.google.firebase", name = "firebase-firestore-ktx", version.ref = "firebaseFirestoreKtx" ***REMOVED***
+firebase-messaging-ktx = ***REMOVED*** group = "com.google.firebase", name = "firebase-messaging-ktx", version.ref = "firebaseMessagingKtx" ***REMOVED***
 
 [plugins]
 android-application = ***REMOVED*** id = "com.android.application", version.ref = "agp" ***REMOVED***

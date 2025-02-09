@@ -5,6 +5,7 @@ plugins ***REMOVED***
     alias(libs.plugins.kotlin.android) version "2.1.0"
     kotlin("plugin.serialization") version "1.8.20"
     id("kotlin-kapt")
+    id("com.google.gms.google-services")
 ***REMOVED***
 
 android ***REMOVED***
@@ -54,6 +55,7 @@ dependencies ***REMOVED***
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
     implementation(libs.firebase.firestore.ktx)
+    implementation(libs.firebase.messaging.ktx)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -69,6 +71,8 @@ dependencies ***REMOVED***
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4") // Or latest for coroutines
     implementation ("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.1")
     implementation ("com.google.code.gson:gson:2.9.1")
+    implementation(platform("com.google.firebase:firebase-bom:33.9.0"))
+    implementation("com.google.firebase:firebase-analytics")
 
 
 ***REMOVED***
