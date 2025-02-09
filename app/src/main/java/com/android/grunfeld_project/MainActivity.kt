@@ -5,11 +5,13 @@ import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
 import android.util.Log
 import android.view.View
+import android.widget.Button
 import android.widget.FrameLayout
 import android.widget.ImageView
 import androidx.activity.enableEdgeToEdge
@@ -64,21 +66,7 @@ class MainActivity : AppCompatActivity() ***REMOVED***
 ***REMOVED***else***REMOVED***
 
             if(!NotificationManagerCompat.from(this).areNotificationsEnabled())***REMOVED***
-                AlertDialog.Builder(this)
-                    .setTitle("Enable Notifications")
-                    .setMessage("To stay updated with latest schedule notifications, do allow notifications...")
-                    .setPositiveButton("Open Settings") ***REMOVED*** _, _ ->
-                        // Save flag indicating we sent the user to settings.
-                        val prefs = getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
-                        prefs.edit().putBoolean(KEY_WENT_TO_SETTINGS, true).apply()
-
-                        // Redirect to the app's notification settings.
-                        val intent = Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS)
-                        intent.putExtra(Settings.EXTRA_APP_PACKAGE, packageName)
-                        startActivity(intent)
-            ***REMOVED***
-                    .setNegativeButton("Cancel", null)
-                    .show()
+                showNotificationDialog()
     ***REMOVED***else ***REMOVED***
                 lifecycleScope.launch ***REMOVED***
                     val githubProfile = sessionReloadAndUpdateProfile()
@@ -270,5 +258,31 @@ class MainActivity : AppCompatActivity() ***REMOVED***
         ***REMOVED***
     ***REMOVED***
 ***REMOVED***
+***REMOVED***
+
+    private fun showNotificationDialog()***REMOVED***
+        val dialogView = layoutInflater.inflate(R.layout.notification_permission_dialog, null)
+        val dialog = AlertDialog.Builder(this)
+            .setView(dialogView)
+            .create()
+
+        dialogView.findViewById<Button>(R.id.dialog_cancel).setOnClickListener ***REMOVED***
+            // quit app...
+            finish()
+***REMOVED***
+
+        dialogView.findViewById<Button>(R.id.dialog_settings).setOnClickListener ***REMOVED***
+            val prefs = getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+            prefs.edit().putBoolean(KEY_WENT_TO_SETTINGS, true).apply()
+
+            // Redirect to notification settings.
+            val intent = Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS)
+            intent.putExtra(Settings.EXTRA_APP_PACKAGE, packageName)
+            startActivity(intent)
+            dialog.dismiss()
+***REMOVED***
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+
+        dialog.show()
 ***REMOVED***
 ***REMOVED***
