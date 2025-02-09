@@ -26,11 +26,18 @@ class FirebaseMessagingService : FirebaseMessagingService() {
         updateUserFcmToken(token)
     }
 
-    private fun updateUserFcmToken(token: String) {
+    fun updateUserFcmToken(token: String) {
         // Launch a coroutine to perform the network call.
         CoroutineScope(Dispatchers.IO).launch {
             try {
-                val userId = supabaseClient.auth.sessionManager.loadSession()?.user?.id
+                // Attempt to load the current session.
+                val session = supabaseClient.auth.sessionManager.loadSession()
+                // Check if the user is logged in (i.e., session and user ID are not null).
+                if (session?.user?.id == null) {
+                    Log.d("FirebaseMessagingService", "User not logged in. Not updating token.")
+                    return@launch
+                }
+                val userId = session.user!!.id
                 val payload = mapOf("user_id" to userId, "fcm_token" to token)
                 val response = supabaseClient.from("user_tokens").insert(payload)
                 Log.d("FirebaseMessagingService", "Token updated: $response")
@@ -39,6 +46,7 @@ class FirebaseMessagingService : FirebaseMessagingService() {
             }
         }
     }
+
 
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
         remoteMessage.notification?.let {
