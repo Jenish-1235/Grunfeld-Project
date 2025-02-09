@@ -14,8 +14,8 @@
         android:layout_marginTop="10dp"
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"
-        app:cardBackgroundColor="@android:color/transparent"
         app:cardCornerRadius="20dp"
+        app:cardBackgroundColor="@android:color/transparent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -26,8 +26,8 @@
             android:id="@+id/bannerImageView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:src="@drawable/background_blue_button"
-            android:tintMode="screen"/>
+            android:tintMode="screen"
+            android:scaleType="centerCrop"/>
     </com.google.android.material.card.MaterialCardView>
 
     <androidx.constraintlayout.widget.ConstraintLayout

@@ -268,8 +268,7 @@ class MainActivity : AppCompatActivity() {
             .create()
 
         dialogView.findViewById<Button>(R.id.dialog_cancel).setOnClickListener {
-            // quit app...
-            finish()
+            dialog.dismiss()
         }
 
         dialogView.findViewById<Button>(R.id.dialog_settings).setOnClickListener {
