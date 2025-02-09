@@ -261,6 +261,7 @@ class MainActivity : AppCompatActivity() ***REMOVED***
 ***REMOVED***
 ***REMOVED***
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun showNotificationDialog()***REMOVED***
         val dialogView = layoutInflater.inflate(R.layout.notification_permission_dialog, null)
         val dialog = AlertDialog.Builder(this)
