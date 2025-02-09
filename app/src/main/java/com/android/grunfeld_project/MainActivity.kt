@@ -1,11 +1,13 @@
 package com.android.grunfeld_project
 
 import android.annotation.SuppressLint
+import android.app.AlertDialog
+import android.content.Context
 import android.content.Intent
 import android.graphics.Color
-import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.provider.Settings
 import android.util.Log
 import android.view.View
 import android.widget.FrameLayout
@@ -13,9 +15,9 @@ import android.widget.ImageView
 import androidx.activity.enableEdgeToEdge
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.NotificationManagerCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.fragment.app.FragmentContainerView
 import androidx.lifecycle.lifecycleScope
 import com.android.grunfeld_project.activities.UserAuth.AuthActivity
 import com.android.grunfeld_project.fragments.DevPostsFragment
@@ -26,38 +28,62 @@ import com.android.grunfeld_project.network.SupabaseClient.supabaseClient
 import com.bumptech.glide.Glide
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayout.OnTabSelectedListener
-import com.squareup.picasso.Picasso
 import io.github.jan.supabase.auth.auth
-import io.github.jan.supabase.postgrest.from
 import kotlinx.coroutines.launch
-import kotlinx.datetime.LocalDateTime
 import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.JsonPrimitive
-import kotlin.reflect.typeOf
-import kotlinx.serialization.json.jsonPrimitive
+
 
 class MainActivity : AppCompatActivity() {
+    companion object {
+        const val PREFS_NAME = "notificationPrefs"
+        const val KEY_WENT_TO_SETTINGS = "wentToSettings"
+    }
+
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         enableEdgeToEdge()
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+
         window.statusBarColor = getColor(R.color.black)
         window.navigationBarColor = getColor(R.color.black)
+
         val loginPrefs = getSharedPreferences("loginPrefs", MODE_PRIVATE)
         val isLoggedIn = loginPrefs.getBoolean("isLoggedIn", false)
+
         if (!isLoggedIn) {
             startActivity(Intent(this, AuthActivity::class.java))
             finish()
-        } else {
-            lifecycleScope.launch {
-                val githubProfile = sessionReloadAndUpdateProfile()
-                bottomNavBar(githubProfile)
+        }else{
+
+            if(!NotificationManagerCompat.from(this).areNotificationsEnabled()){
+                AlertDialog.Builder(this)
+                    .setTitle("Enable Notifications")
+                    .setMessage("To stay updated with latest schedule notifications, do allow notifications...")
+                    .setPositiveButton("Open Settings") { _, _ ->
+                        // Save flag indicating we sent the user to settings.
+                        val prefs = getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+                        prefs.edit().putBoolean(KEY_WENT_TO_SETTINGS, true).apply()
+
+                        // Redirect to the app's notification settings.
+                        val intent = Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS)
+                        intent.putExtra(Settings.EXTRA_APP_PACKAGE, packageName)
+                        startActivity(intent)
+                    }
+                    .setNegativeButton("Cancel", null)
+                    .show()
+            }else {
+                lifecycleScope.launch {
+                    val githubProfile = sessionReloadAndUpdateProfile()
+                    bottomNavBar(githubProfile)
+                }
             }
 
         }
@@ -225,5 +251,24 @@ class MainActivity : AppCompatActivity() {
         })
         scheduleTab.select()
 
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    override fun onResume() {
+        super.onResume()
+        // Check if we previously sent the user to settings.
+        val prefs = getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+        if (prefs.getBoolean(KEY_WENT_TO_SETTINGS, false)) {
+            // Check whether notifications are now enabled.
+            val notificationsEnabled = NotificationManagerCompat.from(this).areNotificationsEnabled()
+            if (notificationsEnabled) {
+                // Remove the flag and reload MainActivity.
+                prefs.edit().remove(KEY_WENT_TO_SETTINGS).apply()
+                lifecycleScope.launch {
+                    val githubProfile = sessionReloadAndUpdateProfile()
+                    bottomNavBar(githubProfile)
+                }
+            }
+        }
     }
 }

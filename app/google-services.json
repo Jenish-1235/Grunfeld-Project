@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "988602490301",
+    "project_id": "grunfeld-android",
+    "storage_bucket": "grunfeld-android.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:988602490301:android:67ac3124353b81c05106d4",
+        "android_client_info": {
+          "package_name": "com.android.grunfeld_project"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCJIK5ONCqVSYWkpWgBQf-DX8wrajsc15M"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
