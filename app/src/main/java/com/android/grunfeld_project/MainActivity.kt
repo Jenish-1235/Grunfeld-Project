@@ -1,21 +1,25 @@
 package com.android.grunfeld_project
 
 import android.annotation.SuppressLint
+import android.app.AlertDialog
+import android.content.Context
 import android.content.Intent
 import android.graphics.Color
-import android.net.Uri
+import android.graphics.drawable.ColorDrawable
 import android.os.Build
 import android.os.Bundle
+import android.provider.Settings
 import android.util.Log
 import android.view.View
+import android.widget.Button
 import android.widget.FrameLayout
 import android.widget.ImageView
 import androidx.activity.enableEdgeToEdge
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.NotificationManagerCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.fragment.app.FragmentContainerView
 import androidx.lifecycle.lifecycleScope
 import com.android.grunfeld_project.activities.UserAuth.AuthActivity
 import com.android.grunfeld_project.fragments.DevPostsFragment
@@ -26,44 +30,55 @@ import com.android.grunfeld_project.network.SupabaseClient.supabaseClient
 import com.bumptech.glide.Glide
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayout.OnTabSelectedListener
-import com.squareup.picasso.Picasso
+import com.google.firebase.messaging.FirebaseMessaging
 import io.github.jan.supabase.auth.auth
 import io.github.jan.supabase.postgrest.from
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.datetime.LocalDateTime
 import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.JsonPrimitive
-import kotlin.reflect.typeOf
-import kotlinx.serialization.json.jsonPrimitive
+
 
 class MainActivity : AppCompatActivity() ***REMOVED***
+    companion object ***REMOVED***
+        const val PREFS_NAME = "notificationPrefs"
+        const val KEY_WENT_TO_SETTINGS = "wentToSettings"
+***REMOVED***
+
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) ***REMOVED***
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         enableEdgeToEdge()
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) ***REMOVED*** v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
 ***REMOVED***
+
         window.statusBarColor = getColor(R.color.black)
         window.navigationBarColor = getColor(R.color.black)
+
         val loginPrefs = getSharedPreferences("loginPrefs", MODE_PRIVATE)
         val isLoggedIn = loginPrefs.getBoolean("isLoggedIn", false)
+
         if (!isLoggedIn) ***REMOVED***
             startActivity(Intent(this, AuthActivity::class.java))
             finish()
-***REMOVED*** else ***REMOVED***
-            lifecycleScope.launch ***REMOVED***
-                val githubProfile = sessionReloadAndUpdateProfile()
-                bottomNavBar(githubProfile)
+***REMOVED***else***REMOVED***
+
+            if(!NotificationManagerCompat.from(this).areNotificationsEnabled())***REMOVED***
+                showNotificationDialog()
+    ***REMOVED***else ***REMOVED***
+                lifecycleScope.launch ***REMOVED***
+                    val githubProfile = sessionReloadAndUpdateProfile()
+                    bottomNavBar(githubProfile)
+                    updateTokenAfterLogin()
+        ***REMOVED***
     ***REMOVED***
-
 ***REMOVED***
-
-
-
 ***REMOVED***
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -88,7 +103,7 @@ class MainActivity : AppCompatActivity() ***REMOVED***
         tabLayout.setSelectedTabIndicatorColor(Color.WHITE)
         tabLayout.setTabTextColors(Color.WHITE, Color.WHITE)
         tabLayout.setSelectedTabIndicatorHeight(0)
-
+        tabLayout.removeAllTabs()
 
         val fragmentContainerView = findViewById<FrameLayout>(R.id.fragment_container_view)
 
@@ -226,4 +241,93 @@ class MainActivity : AppCompatActivity() ***REMOVED***
         scheduleTab.select()
 
 ***REMOVED***
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    override fun onResume() ***REMOVED***
+        super.onResume()
+
+        val prefs = getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+        if (prefs.getBoolean(KEY_WENT_TO_SETTINGS, false)) ***REMOVED***
+
+            val notificationsEnabled = NotificationManagerCompat.from(this).areNotificationsEnabled()
+            if (notificationsEnabled) ***REMOVED***
+                prefs.edit().remove(KEY_WENT_TO_SETTINGS).apply()
+                lifecycleScope.launch ***REMOVED***
+                    val githubProfile = sessionReloadAndUpdateProfile()
+                    bottomNavBar(githubProfile)
+                    updateTokenAfterLogin()
+        ***REMOVED***
+    ***REMOVED***
+***REMOVED***
+***REMOVED***
+
+    private fun showNotificationDialog()***REMOVED***
+        val dialogView = layoutInflater.inflate(R.layout.notification_permission_dialog, null)
+        val dialog = AlertDialog.Builder(this)
+            .setView(dialogView)
+            .create()
+
+        dialogView.findViewById<Button>(R.id.dialog_cancel).setOnClickListener ***REMOVED***
+            // quit app...
+            finish()
+***REMOVED***
+
+        dialogView.findViewById<Button>(R.id.dialog_settings).setOnClickListener ***REMOVED***
+            val prefs = getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+            prefs.edit().putBoolean(KEY_WENT_TO_SETTINGS, true).apply()
+
+            // Redirect to notification settings.
+            val intent = Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS)
+            intent.putExtra(Settings.EXTRA_APP_PACKAGE, packageName)
+            startActivity(intent)
+            dialog.dismiss()
+***REMOVED***
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+
+        dialog.show()
+***REMOVED***
+    private fun updateTokenAfterLogin() ***REMOVED***
+        FirebaseMessaging.getInstance().token.addOnCompleteListener ***REMOVED*** task ->
+            if (!task.isSuccessful) ***REMOVED***
+                Log.w("AuthActivity", "Fetching FCM registration token failed", task.exception)
+                return@addOnCompleteListener
+    ***REMOVED***
+            val token = task.result
+            updateUserFCM(token)
+***REMOVED***
+***REMOVED***
+
+    private fun updateUserFCM(token: String) ***REMOVED***
+        CoroutineScope(Dispatchers.IO).launch ***REMOVED***
+            try ***REMOVED***
+                val session = supabaseClient.auth.sessionManager.loadSession()
+                if (session?.user?.id == null) ***REMOVED***
+                    Log.d("MainActivity", "No user logged in. Skipping token update.")
+                    return@launch
+        ***REMOVED***
+                val userId = session.user!!.id
+                val payload = mapOf("user_id" to userId, "fcm_token" to token)
+
+                val selectResponse = supabaseClient.from("user_tokens").select***REMOVED***
+                    filter ***REMOVED***
+                        eq("user_id", userId)
+            ***REMOVED***
+        ***REMOVED***
+
+                if (selectResponse.data != null && selectResponse.data.toString().isNotEmpty() && selectResponse.data.toString() != "[]") ***REMOVED***
+                    supabaseClient.from("user_tokens").update(payload) ***REMOVED***
+                        filter ***REMOVED***
+                            eq("user_id", userId)
+                ***REMOVED***
+            ***REMOVED***
+        ***REMOVED*** else ***REMOVED***
+                   supabaseClient.from("user_tokens").insert(payload)
+
+        ***REMOVED***
+    ***REMOVED*** catch (e: Exception) ***REMOVED***
+                Log.e("MainActivity", "Error updating user token: $***REMOVED***e.message***REMOVED***")
+    ***REMOVED***
+***REMOVED***
+***REMOVED***
+
 ***REMOVED***
