@@ -261,6 +261,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun showNotificationDialog(){
         val dialogView = layoutInflater.inflate(R.layout.notification_permission_dialog, null)
         val dialog = AlertDialog.Builder(this)
