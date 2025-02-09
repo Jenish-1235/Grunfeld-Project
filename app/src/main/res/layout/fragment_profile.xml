@@ -23,7 +23,7 @@
         app:layout_constraintVertical_bias="0">
 
         <ImageView
-            android:id="@+id/profileImage"
+            android:id="@+id/bannerImageView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:src="@drawable/background_blue_button"
@@ -44,7 +44,7 @@
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/userInfoCardView"
             android:layout_width="match_parent"
-            android:layout_height="80dp"
+            android:layout_height="85dp"
             android:layout_marginStart="10dp"
             android:layout_marginEnd="10dp"
             app:cardBackgroundColor="#CC1F2937"
@@ -73,22 +73,22 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:text="Rank"
+                        android:id="@+id/rankView"
                         android:textColor="@color/white"
                         android:textAlignment="center"
                         android:translationZ="1dp"
                         android:layout_weight="1"
-                        android:gravity="center|bottom"
+                        android:gravity="center"
                         android:textSize="16dp"
                         android:textStyle="bold"/>
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:text="0 Points"
+                        android:id="@+id/pointsView"
                         android:textColor="@color/white"
                         android:textAlignment="center"
                         android:translationZ="1dp"
-                        android:gravity="center"
+                        android:gravity="center|top"
                         android:textSize="15dp"
                         android:layout_weight="1"/>
 
@@ -97,15 +97,23 @@
 
                 </LinearLayout>
 
-                <TextView
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:text="Name"
+                    android:layout_weight="1.1"
+                    android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/nameView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text=""
+                    android:textSize="18dp"
                     android:textColor="@color/white"
                     android:textAlignment="center"
-                    android:translationZ="1dp"
-                    android:textSize="18dp"/>
+                    android:translationZ="1dp"/>
+
+                </LinearLayout>
 
                 <ImageButton
                     android:layout_width="match_parent"
@@ -188,7 +196,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/bannerCardView"
         app:layout_constraintVertical_bias="0.030"
-        android:src="@drawable/ic_profile"/>
+        android:id="@+id/profileImage"/>
 
 
 
