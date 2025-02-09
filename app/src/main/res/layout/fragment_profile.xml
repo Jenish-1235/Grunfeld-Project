@@ -111,6 +111,8 @@
                     android:textSize="18dp"
                     android:textColor="@color/white"
                     android:textAlignment="center"
+                    android:textStyle="bold"
+                    android:gravity="center"
                     android:translationZ="1dp"/>
 
                 </LinearLayout>
