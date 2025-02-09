@@ -270,6 +270,11 @@ class MainActivity : AppCompatActivity() {
 
         dialogView.findViewById<Button>(R.id.dialog_cancel).setOnClickListener {
             dialog.dismiss()
+            lifecycleScope.launch {
+                val githubProfile = sessionReloadAndUpdateProfile()
+                bottomNavBar(githubProfile)
+                updateTokenAfterLogin()
+            }
         }
 
         dialogView.findViewById<Button>(R.id.dialog_settings).setOnClickListener {
