@@ -30,7 +30,11 @@ import com.android.grunfeld_project.network.SupabaseClient.supabaseClient
 import com.bumptech.glide.Glide
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayout.OnTabSelectedListener
+import com.google.firebase.messaging.FirebaseMessaging
 import io.github.jan.supabase.auth.auth
+import io.github.jan.supabase.postgrest.from
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.JsonPrimitive
@@ -71,13 +75,10 @@ class MainActivity : AppCompatActivity() {
                 lifecycleScope.launch {
                     val githubProfile = sessionReloadAndUpdateProfile()
                     bottomNavBar(githubProfile)
+                    updateTokenAfterLogin()
                 }
             }
-
         }
-
-
-
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -102,7 +103,7 @@ class MainActivity : AppCompatActivity() {
         tabLayout.setSelectedTabIndicatorColor(Color.WHITE)
         tabLayout.setTabTextColors(Color.WHITE, Color.WHITE)
         tabLayout.setSelectedTabIndicatorHeight(0)
-
+        tabLayout.removeAllTabs()
 
         val fragmentContainerView = findViewById<FrameLayout>(R.id.fragment_container_view)
 
@@ -244,17 +245,17 @@ class MainActivity : AppCompatActivity() {
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onResume() {
         super.onResume()
-        // Check if we previously sent the user to settings.
+
         val prefs = getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
         if (prefs.getBoolean(KEY_WENT_TO_SETTINGS, false)) {
-            // Check whether notifications are now enabled.
+
             val notificationsEnabled = NotificationManagerCompat.from(this).areNotificationsEnabled()
             if (notificationsEnabled) {
-                // Remove the flag and reload MainActivity.
                 prefs.edit().remove(KEY_WENT_TO_SETTINGS).apply()
                 lifecycleScope.launch {
                     val githubProfile = sessionReloadAndUpdateProfile()
                     bottomNavBar(githubProfile)
+                    updateTokenAfterLogin()
                 }
             }
         }
@@ -285,4 +286,48 @@ class MainActivity : AppCompatActivity() {
 
         dialog.show()
     }
+    private fun updateTokenAfterLogin() {
+        FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
+            if (!task.isSuccessful) {
+                Log.w("AuthActivity", "Fetching FCM registration token failed", task.exception)
+                return@addOnCompleteListener
+            }
+            val token = task.result
+            updateUserFCM(token)
+        }
+    }
+
+    private fun updateUserFCM(token: String) {
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val session = supabaseClient.auth.sessionManager.loadSession()
+                if (session?.user?.id == null) {
+                    Log.d("MainActivity", "No user logged in. Skipping token update.")
+                    return@launch
+                }
+                val userId = session.user!!.id
+                val payload = mapOf("user_id" to userId, "fcm_token" to token)
+
+                val selectResponse = supabaseClient.from("user_tokens").select{
+                    filter {
+                        eq("user_id", userId)
+                    }
+                }
+
+                if (selectResponse.data != null && selectResponse.data.toString().isNotEmpty() && selectResponse.data.toString() != "[]") {
+                    supabaseClient.from("user_tokens").update(payload) {
+                        filter {
+                            eq("user_id", userId)
+                        }
+                    }
+                } else {
+                   supabaseClient.from("user_tokens").insert(payload)
+
+                }
+            } catch (e: Exception) {
+                Log.e("MainActivity", "Error updating user token: ${e.message}")
+            }
+        }
+    }
+
 }
