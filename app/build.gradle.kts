@@ -25,6 +25,7 @@ android ***REMOVED***
 ***REMOVED***
         buildConfigField("String", "BASE_URL", "\"$***REMOVED***properties.getProperty("supabase.url")***REMOVED***\"")
         buildConfigField("String", "ANON_KEY", "\"$***REMOVED***properties.getProperty("supabase.anon.key")***REMOVED***\"")
+        buildConfigField("String", "PEXEL_API_KEY", "\"$***REMOVED***properties.getProperty("pexels.api.key")***REMOVED***\"")
 ***REMOVED***
 
     buildTypes ***REMOVED***

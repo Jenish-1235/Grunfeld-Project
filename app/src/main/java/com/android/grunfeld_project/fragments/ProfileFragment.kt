@@ -4,6 +4,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -12,7 +13,9 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.lifecycleScope
+import com.android.grunfeld_project.BuildConfig
 import com.android.grunfeld_project.R
+import com.android.grunfeld_project.models.PexelsResponse
 import com.android.grunfeld_project.models.User
 import com.android.grunfeld_project.network.SupabaseClient.supabaseClient
 import com.bumptech.glide.Glide
@@ -23,6 +26,14 @@ import io.github.jan.supabase.auth.auth
 import io.github.jan.supabase.postgrest.from
 import io.github.jan.supabase.postgrest.result.PostgrestResult
 import kotlinx.coroutines.launch
+import io.ktor.client.*
+import io.ktor.client.call.* // or another engine
+import io.ktor.client.request.*
+import io.ktor.client.statement.*
+import io.ktor.http.*
+import io.ktor.client.plugins.contentnegotiation.*
+import io.ktor.serialization.kotlinx.json.*
+import kotlinx.serialization.json.Json
 
 
 class ProfileFragment : Fragment() ***REMOVED***
@@ -59,6 +70,16 @@ class ProfileFragment : Fragment() ***REMOVED***
     ***REMOVED***
 ***REMOVED***
 
+        val pexelAPI = BuildConfig.PEXEL_API_KEY
+        val bannerImageView = view.findViewById<ImageView>(R.id.bannerImageView)
+        lifecycleScope.launch ***REMOVED***
+            val randomBannerImageUrl = fetchRandomBannerImageUrl(pexelAPI)
+            Log.d("Banner", "Banner URL: $randomBannerImageUrl")
+            Glide.with(requireContext())
+                .load(randomBannerImageUrl)
+                .transition(com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withCrossFade())
+                .into(bannerImageView)
+***REMOVED***
 
 
         return view
@@ -100,4 +121,38 @@ class ProfileFragment : Fragment() ***REMOVED***
         return gson.fromJson(jsonString, userListType)
 ***REMOVED***
 
+    suspend fun fetchRandomBannerImageUrl(apiKey: String): String? ***REMOVED***
+
+        val randomPage = Math.floor(Math.random() * 10) + 1
+        val client = HttpClient()
+
+        return try ***REMOVED***
+
+            val response: HttpResponse = client.get("https://api.pexels.com/v1/search?query=abstract&orientation=landscape&per_page=1&page=$***REMOVED***randomPage***REMOVED***") ***REMOVED***
+                header(HttpHeaders.Authorization, apiKey)
+                parameter("page", randomPage)
+                parameter("per_page", 1)
+    ***REMOVED***
+
+            if (response.status.isSuccess()) ***REMOVED***
+                val bodyString = response.bodyAsText()
+
+                val pexelsResponse = Gson().fromJson(bodyString, PexelsResponse::class.java)
+
+                if (pexelsResponse.photos.isNotEmpty()) ***REMOVED***
+                    val imageUrl = pexelsResponse.photos.first().src.landscape
+                    imageUrl
+        ***REMOVED*** else ***REMOVED***
+                    null
+        ***REMOVED***
+    ***REMOVED*** else ***REMOVED***
+                null
+    ***REMOVED***
+***REMOVED*** catch (e: Exception) ***REMOVED***
+            e.printStackTrace()
+            null
+***REMOVED*** finally ***REMOVED***
+            client.close()
+***REMOVED***
+***REMOVED***
 ***REMOVED***
