@@ -30,7 +30,11 @@ import com.android.grunfeld_project.network.SupabaseClient.supabaseClient
 import com.bumptech.glide.Glide
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayout.OnTabSelectedListener
+import com.google.firebase.messaging.FirebaseMessaging
 import io.github.jan.supabase.auth.auth
+import io.github.jan.supabase.postgrest.from
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.JsonPrimitive
@@ -71,13 +75,10 @@ class MainActivity : AppCompatActivity() ***REMOVED***
                 lifecycleScope.launch ***REMOVED***
                     val githubProfile = sessionReloadAndUpdateProfile()
                     bottomNavBar(githubProfile)
+                    updateTokenAfterLogin()
         ***REMOVED***
     ***REMOVED***
-
 ***REMOVED***
-
-
-
 ***REMOVED***
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -102,7 +103,7 @@ class MainActivity : AppCompatActivity() ***REMOVED***
         tabLayout.setSelectedTabIndicatorColor(Color.WHITE)
         tabLayout.setTabTextColors(Color.WHITE, Color.WHITE)
         tabLayout.setSelectedTabIndicatorHeight(0)
-
+        tabLayout.removeAllTabs()
 
         val fragmentContainerView = findViewById<FrameLayout>(R.id.fragment_container_view)
 
@@ -244,17 +245,17 @@ class MainActivity : AppCompatActivity() ***REMOVED***
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onResume() ***REMOVED***
         super.onResume()
-        // Check if we previously sent the user to settings.
+
         val prefs = getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
         if (prefs.getBoolean(KEY_WENT_TO_SETTINGS, false)) ***REMOVED***
-            // Check whether notifications are now enabled.
+
             val notificationsEnabled = NotificationManagerCompat.from(this).areNotificationsEnabled()
             if (notificationsEnabled) ***REMOVED***
-                // Remove the flag and reload MainActivity.
                 prefs.edit().remove(KEY_WENT_TO_SETTINGS).apply()
                 lifecycleScope.launch ***REMOVED***
                     val githubProfile = sessionReloadAndUpdateProfile()
                     bottomNavBar(githubProfile)
+                    updateTokenAfterLogin()
         ***REMOVED***
     ***REMOVED***
 ***REMOVED***
@@ -285,4 +286,48 @@ class MainActivity : AppCompatActivity() ***REMOVED***
 
         dialog.show()
 ***REMOVED***
+    private fun updateTokenAfterLogin() ***REMOVED***
+        FirebaseMessaging.getInstance().token.addOnCompleteListener ***REMOVED*** task ->
+            if (!task.isSuccessful) ***REMOVED***
+                Log.w("AuthActivity", "Fetching FCM registration token failed", task.exception)
+                return@addOnCompleteListener
+    ***REMOVED***
+            val token = task.result
+            updateUserFCM(token)
+***REMOVED***
+***REMOVED***
+
+    private fun updateUserFCM(token: String) ***REMOVED***
+        CoroutineScope(Dispatchers.IO).launch ***REMOVED***
+            try ***REMOVED***
+                val session = supabaseClient.auth.sessionManager.loadSession()
+                if (session?.user?.id == null) ***REMOVED***
+                    Log.d("MainActivity", "No user logged in. Skipping token update.")
+                    return@launch
+        ***REMOVED***
+                val userId = session.user!!.id
+                val payload = mapOf("user_id" to userId, "fcm_token" to token)
+
+                val selectResponse = supabaseClient.from("user_tokens").select***REMOVED***
+                    filter ***REMOVED***
+                        eq("user_id", userId)
+            ***REMOVED***
+        ***REMOVED***
+
+                if (selectResponse.data != null && selectResponse.data.toString().isNotEmpty() && selectResponse.data.toString() != "[]") ***REMOVED***
+                    supabaseClient.from("user_tokens").update(payload) ***REMOVED***
+                        filter ***REMOVED***
+                            eq("user_id", userId)
+                ***REMOVED***
+            ***REMOVED***
+        ***REMOVED*** else ***REMOVED***
+                   supabaseClient.from("user_tokens").insert(payload)
+
+        ***REMOVED***
+    ***REMOVED*** catch (e: Exception) ***REMOVED***
+                Log.e("MainActivity", "Error updating user token: $***REMOVED***e.message***REMOVED***")
+    ***REMOVED***
+***REMOVED***
+***REMOVED***
+
 ***REMOVED***
