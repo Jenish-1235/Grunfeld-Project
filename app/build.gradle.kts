@@ -25,6 +25,7 @@ android {
         }
         buildConfigField("String", "BASE_URL", "\"${properties.getProperty("supabase.url")}\"")
         buildConfigField("String", "ANON_KEY", "\"${properties.getProperty("supabase.anon.key")}\"")
+        buildConfigField("String", "PEXEL_API_KEY", "\"${properties.getProperty("pexels.api.key")}\"")
     }
 
     buildTypes {
