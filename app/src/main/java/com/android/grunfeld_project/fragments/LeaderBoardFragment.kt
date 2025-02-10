@@ -2,6 +2,7 @@ package com.android.grunfeld_project.fragments
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.res.ColorStateList
 import android.os.Build
 import android.os.Bundle
 import android.text.Editable
@@ -76,6 +77,7 @@ class LeaderBoardFragment : Fragment() ***REMOVED***
             searchBar.setOnFocusChangeListener ***REMOVED*** _, hasFocus ->
                 if (hasFocus) ***REMOVED***
                     searchBar.text?.clear()
+                    searchBar.hint = "Search for a someone special..."
         ***REMOVED***
     ***REMOVED***
 

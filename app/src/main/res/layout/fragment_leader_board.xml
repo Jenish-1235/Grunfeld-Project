@@ -117,7 +117,7 @@
             android:inputType="text"
             android:maxLines="1"
             android:textColor="@color/white"
-            android:textColorHint="@color/white" />
+            android:textColorHint="@color/gray"/>
 
     </com.google.android.material.textfield.TextInputLayout>
 
