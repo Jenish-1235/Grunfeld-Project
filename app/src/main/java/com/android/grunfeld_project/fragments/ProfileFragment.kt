@@ -1,5 +1,7 @@
 package com.android.grunfeld_project.fragments
 
+import android.content.Context
+import android.content.Context.MODE_PRIVATE
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
@@ -9,9 +11,12 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -67,6 +72,8 @@ class ProfileFragment : Fragment() ***REMOVED***
             nameView.text = userProfile[1].toString()
             rankView.text = userProfile[3].toString()
             pointsView.text = userProfile[4].toString() + " Points"
+            val aboutView = view.findViewById<TextView>(R.id.userAboutView)
+            aboutView.text = userProfile[6].toString()
 
             val profileImage = view.findViewById<ImageView>(R.id.profileImage)
             Glide.with(requireContext())
@@ -113,6 +120,26 @@ class ProfileFragment : Fragment() ***REMOVED***
 
 ***REMOVED***
 
+
+        val editAboutButton = view.findViewById<TextView>(R.id.userAboutEdit)
+        if (rollNumber != "") ***REMOVED***
+            editAboutButton.visibility = View.GONE
+***REMOVED***
+
+        editAboutButton.setOnClickListener ***REMOVED***
+            val aboutView = view.findViewById<TextView>(R.id.userAboutView)
+            val aboutString = aboutView.text.toString()
+
+            val bundle = Bundle()
+            bundle.putString("about", aboutString)
+            bundle.putString("roll_number", userProfile[2].toString())
+            UpdateAboutDialog(bundle)
+
+***REMOVED***
+
+
+
+
         return view
 ***REMOVED***
 
@@ -151,9 +178,10 @@ class ProfileFragment : Fragment() ***REMOVED***
             rank = "Director"
 ***REMOVED***
         val githubUserName = fetchedUser[0].username.trim('"')
-
-
-        return arrayOf(githubProfileUrl, nameString, rollNumberString, rank, pointsInt, githubUserName)
+        if(fetchedUser[0].about == null || fetchedUser[0].about == "" || fetchedUser[0].about == "NULL")***REMOVED***
+            fetchedUser[0].about = "I Love Open Source Software... 💗💗💗"
+***REMOVED***
+        return arrayOf(githubProfileUrl, nameString, rollNumberString, rank, pointsInt, githubUserName, fetchedUser[0].about)
 ***REMOVED***
 
     fun parseUserData(jsonString: String): List<User> ***REMOVED***
@@ -203,6 +231,44 @@ class ProfileFragment : Fragment() ***REMOVED***
         // Create a TypeToken for a List<User>
         val userListType = object : TypeToken<List<UserBadge>>() ***REMOVED******REMOVED***.type
         return gson.fromJson(jsonString, userListType)
+***REMOVED***
+
+    fun UpdateAboutDialog(bundle: Bundle)***REMOVED***
+        val updateAboutDialogView = layoutInflater.inflate(R.layout.update_about_dialog, null)
+        val dialog = AlertDialog.Builder(requireContext())
+            .setView(updateAboutDialogView)
+            .create()
+
+        val aboutString = bundle?.getString("about").toString()
+
+        updateAboutDialogView.findViewById<EditText>(R.id.userAboutView).setText(aboutString)
+
+        dialog.setCancelable(false)
+        updateAboutDialogView.findViewById<TextView>(R.id.dialog_cancel).setOnClickListener ***REMOVED***
+            dialog.dismiss()
+***REMOVED***
+        dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
+
+        updateAboutDialogView.findViewById<TextView>(R.id.save_about).setOnClickListener ***REMOVED***
+            val aboutView = updateAboutDialogView.findViewById<TextView>(R.id.userAboutView)
+            val aboutString = aboutView?.text.toString()
+            lifecycleScope.launch ***REMOVED***
+                val session = supabaseClient.auth.sessionManager.loadSession()
+                supabaseClient.from("users").update(
+                    mapOf("about" to aboutString)
+                ) ***REMOVED***
+                    filter ***REMOVED***
+                        session?.user?.id?.let ***REMOVED*** eq("id", it) ***REMOVED***
+            ***REMOVED***
+        ***REMOVED***
+
+                val aboutView = view?.findViewById<TextView>(R.id.userAboutView)
+                aboutView?.text = aboutString
+                dialog.dismiss()
+
+    ***REMOVED***
+***REMOVED***
+        dialog.show()
 ***REMOVED***
 
 ***REMOVED***

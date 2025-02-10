@@ -2,6 +2,7 @@ package com.android.grunfeld_project.adapters
 
 import android.content.Intent
 import android.net.Uri
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,6 +12,7 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.android.grunfeld_project.R
+import com.android.grunfeld_project.fragments.ProfileFragment
 import com.android.grunfeld_project.models.User
 import com.bumptech.glide.Glide
 
@@ -67,6 +69,27 @@ class LeaderBoardListAdapter(userList: List<User>): RecyclerView.Adapter<LeaderB
             val intent = Intent(Intent.ACTION_VIEW, Uri.parse(githubProfileUrl))
             startActivity(holder.itemView.context, intent, null)
 ***REMOVED***
+
+        holder.itemView.setOnClickListener ***REMOVED***
+            val profileFragment = ProfileFragment()
+            val parentContext = holder.itemView.context
+            val bundle = Bundle()
+
+            if (currentUser.roll_number != parentContext.getSharedPreferences("user_data", 0).getString("rollNumber", "")) ***REMOVED***
+                bundle.putString("roll_number", currentUser.roll_number)
+    ***REMOVED***else***REMOVED***
+                bundle.putString("roll_number", "")
+    ***REMOVED***
+
+            profileFragment.arguments = bundle
+            val fragmentManager = (parentContext as androidx.fragment.app.FragmentActivity).supportFragmentManager
+            fragmentManager.beginTransaction()
+                .replace(R.id.fragment_container_view, profileFragment)
+                .addToBackStack(null)
+                .commit()
+
+***REMOVED***
+
 
 ***REMOVED***
 

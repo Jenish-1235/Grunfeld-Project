@@ -2,6 +2,7 @@ package com.android.grunfeld_project.fragments
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.res.ColorStateList
 import android.os.Build
 import android.os.Bundle
 import android.text.Editable
@@ -15,6 +16,7 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.RequiresApi
+import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat.getSystemService
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -75,6 +77,7 @@ class LeaderBoardFragment : Fragment() ***REMOVED***
             searchBar.setOnFocusChangeListener ***REMOVED*** _, hasFocus ->
                 if (hasFocus) ***REMOVED***
                     searchBar.text?.clear()
+                    searchBar.hint = "Search for a someone special..."
         ***REMOVED***
     ***REMOVED***
 
@@ -117,8 +120,6 @@ class LeaderBoardFragment : Fragment() ***REMOVED***
 
                 override fun afterTextChanged(s: Editable?) ***REMOVED*** ***REMOVED***
     ***REMOVED***)
-
-
             searchBar.setOnEditorActionListener ***REMOVED*** textView, actionId, keyEvent ->
                 if (actionId == EditorInfo.IME_ACTION_SEARCH) ***REMOVED***
                     // Hide the soft keyboard
@@ -131,8 +132,20 @@ class LeaderBoardFragment : Fragment() ***REMOVED***
                     false
         ***REMOVED***
     ***REMOVED***
-
 ***REMOVED***
+
+        val userProfileCard = view.findViewById<CardView>(R.id.userProfileCard)
+        userProfileCard.setOnClickListener ***REMOVED***
+            val parentContext = context
+            val profileFragment = ProfileFragment()
+            if (parentContext != null) ***REMOVED***
+                parentFragmentManager.beginTransaction()
+                    .replace(R.id.fragment_container_view, profileFragment)
+                    .addToBackStack(null)
+                    .commit()
+    ***REMOVED***
+***REMOVED***
+
         return view
 ***REMOVED***
 
