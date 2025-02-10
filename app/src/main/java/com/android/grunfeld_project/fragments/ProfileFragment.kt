@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
@@ -127,7 +128,7 @@ class ProfileFragment : Fragment() {
             val bundle = Bundle()
             bundle.putString("about", aboutString)
             bundle.putString("roll_number", userProfile[2].toString())
-            UpdateAboutDialog()
+            UpdateAboutDialog(bundle)
 
         }
 
@@ -228,16 +229,21 @@ class ProfileFragment : Fragment() {
         return gson.fromJson(jsonString, userListType)
     }
 
-    fun UpdateAboutDialog(){
+    fun UpdateAboutDialog(bundle: Bundle){
         val updateAboutDialogView = layoutInflater.inflate(R.layout.update_about_dialog, null)
         val dialog = AlertDialog.Builder(requireContext())
             .setView(updateAboutDialogView)
             .create()
 
+        val aboutString = bundle?.getString("about").toString()
+
+        updateAboutDialogView.findViewById<EditText>(R.id.userAboutView).setText(aboutString)
+
         dialog.setCancelable(false)
         updateAboutDialogView.findViewById<TextView>(R.id.dialog_cancel).setOnClickListener {
             dialog.dismiss()
         }
+        dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
 
         updateAboutDialogView.findViewById<TextView>(R.id.save_about).setOnClickListener {
             val aboutView = updateAboutDialogView.findViewById<TextView>(R.id.userAboutView)

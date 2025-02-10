@@ -6,13 +6,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     app:cardCornerRadius="20dp"
     android:layout_margin="15dp"
-    android:background="@android:color/transparent"
+    app:cardBackgroundColor="#111111"
     android:elevation="10dp">
     <LinearLayout
         android:id="@+id/dialog_layout_root"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/gray"
+        android:background="#111111"
         android:orientation="vertical"
         android:padding="15dp">
 
@@ -30,14 +30,15 @@
             android:drawableStart="@drawable/ic_profile"/>
 
         <!-- Message -->
-            <EditText
+            <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/userAboutView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="New About here ..."
+            android:textColorHint="@color/gray"
             android:textColor="@color/white"
             android:textSize="15sp"
-            android:paddingBottom="16dp" />
+            android:paddingBottom="16dp"/>
 
         <!-- Buttons container -->
         <LinearLayout
@@ -51,7 +52,7 @@
                 android:id="@+id/dialog_cancel"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:text="Cancel..❌"
+                android:text="Cancel...❌"
                 android:textColor="@color/white"
                 android:backgroundTint="@color/gray"
                 android:layout_weight="1.4"/>
