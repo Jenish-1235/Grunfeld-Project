@@ -8,7 +8,7 @@
     android:background="@color/black">
 
     <androidx.cardview.widget.CardView xmlns:tools="http://schemas.android.com/tools"
-        android:id="@+id/cardView"
+        android:id="@+id/userProfileCard"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/gray"
@@ -102,7 +102,7 @@
         app:hintEnabled="false"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cardView"
+        app:layout_constraintTop_toBottomOf="@+id/userProfileCard"
         app:startIconDrawable="@drawable/ic_search_small"
         app:startIconTint="@color/white">
 

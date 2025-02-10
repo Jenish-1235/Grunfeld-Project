@@ -63,13 +63,14 @@ class MainActivity : AppCompatActivity() {
 
         val loginPrefs = getSharedPreferences("loginPrefs", MODE_PRIVATE)
         val isLoggedIn = loginPrefs.getBoolean("isLoggedIn", false)
+        val isNotificationDenied = getSharedPreferences("isNotificationDenied", MODE_PRIVATE)
 
         if (!isLoggedIn) {
             startActivity(Intent(this, AuthActivity::class.java))
             finish()
         }else{
 
-            if(!NotificationManagerCompat.from(this).areNotificationsEnabled()){
+            if(!NotificationManagerCompat.from(this).areNotificationsEnabled() && !isNotificationDenied.getBoolean("isDenied", false)){
                 showNotificationDialog()
             }else {
                 lifecycleScope.launch {
@@ -270,6 +271,8 @@ class MainActivity : AppCompatActivity() {
 
         dialogView.findViewById<Button>(R.id.dialog_cancel).setOnClickListener {
             dialog.dismiss()
+            var isNotificationDenied = getSharedPreferences("isNotificationDenied", MODE_PRIVATE)
+            isNotificationDenied.edit().putBoolean("isDenied", true).apply()
             lifecycleScope.launch {
                 val githubProfile = sessionReloadAndUpdateProfile()
                 bottomNavBar(githubProfile)
@@ -291,6 +294,7 @@ class MainActivity : AppCompatActivity() {
 
         dialog.show()
     }
+
     private fun updateTokenAfterLogin() {
         FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
             if (!task.isSuccessful) {
