@@ -6,6 +6,7 @@
         <item name="colorControlNormal">#c5c5c5</item>
         <item name="colorControlActivated">@color/white</item>
         <item name="colorControlHighlight">@color/white</item>
+        <item name="android:windowBackground">#000000</item>
     </style>
     <style name="SearchBarTextAppearance" parent="TextAppearance.AppCompat.Body1">
         <item name="android:textColor">@color/white</item>

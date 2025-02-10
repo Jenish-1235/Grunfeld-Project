@@ -76,6 +76,7 @@ dependencies ***REMOVED***
     implementation("com.google.firebase:firebase-analytics")
     implementation("io.coil-kt:coil:2.3.0")       // or latest
     implementation("io.coil-kt:coil-svg:2.3.0")
+    implementation("androidx.core:core-splashscreen:1.0.0")
 
 
 ***REMOVED***
