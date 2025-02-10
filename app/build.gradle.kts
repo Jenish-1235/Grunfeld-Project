@@ -25,6 +25,7 @@ android ***REMOVED***
 ***REMOVED***
         buildConfigField("String", "BASE_URL", "\"$***REMOVED***properties.getProperty("supabase.url")***REMOVED***\"")
         buildConfigField("String", "ANON_KEY", "\"$***REMOVED***properties.getProperty("supabase.anon.key")***REMOVED***\"")
+        buildConfigField("String", "PEXEL_API_KEY", "\"$***REMOVED***properties.getProperty("pexels.api.key")***REMOVED***\"")
 ***REMOVED***
 
     buildTypes ***REMOVED***
@@ -73,6 +74,8 @@ dependencies ***REMOVED***
     implementation ("com.google.code.gson:gson:2.9.1")
     implementation(platform("com.google.firebase:firebase-bom:33.9.0"))
     implementation("com.google.firebase:firebase-analytics")
+    implementation("io.coil-kt:coil:2.3.0")       // or latest
+    implementation("io.coil-kt:coil-svg:2.3.0")
 
 
 ***REMOVED***

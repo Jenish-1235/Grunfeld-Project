@@ -261,6 +261,7 @@ class MainActivity : AppCompatActivity() ***REMOVED***
 ***REMOVED***
 ***REMOVED***
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun showNotificationDialog()***REMOVED***
         val dialogView = layoutInflater.inflate(R.layout.notification_permission_dialog, null)
         val dialog = AlertDialog.Builder(this)
@@ -268,8 +269,12 @@ class MainActivity : AppCompatActivity() ***REMOVED***
             .create()
 
         dialogView.findViewById<Button>(R.id.dialog_cancel).setOnClickListener ***REMOVED***
-            // quit app...
-            finish()
+            dialog.dismiss()
+            lifecycleScope.launch ***REMOVED***
+                val githubProfile = sessionReloadAndUpdateProfile()
+                bottomNavBar(githubProfile)
+                updateTokenAfterLogin()
+    ***REMOVED***
 ***REMOVED***
 
         dialogView.findViewById<Button>(R.id.dialog_settings).setOnClickListener ***REMOVED***
