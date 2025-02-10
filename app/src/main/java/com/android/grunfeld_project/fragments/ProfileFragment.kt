@@ -41,31 +41,31 @@ import io.ktor.client.statement.*
 import io.ktor.http.*
 
 
-class ProfileFragment : Fragment() ***REMOVED***
+class ProfileFragment : Fragment() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? ***REMOVED***
+    ): View? {
 
         val view = inflater.inflate(R.layout.fragment_profile, container, false)
 
         val bundle = arguments
         lateinit var rollNumber: String
-        if (bundle != null) ***REMOVED***
+        if (bundle != null) {
             rollNumber = bundle.getString("roll_number").toString()
-***REMOVED***else***REMOVED***
+        }else{
             rollNumber = ""
-***REMOVED***
+        }
 
         lateinit var userProfile: Array<Any>
-        lifecycleScope.launch ***REMOVED***
-            if (rollNumber != "") ***REMOVED***
+        lifecycleScope.launch {
+            if (rollNumber != "") {
                 userProfile = loadSessionAndCurrentUser(rollNumber)
-    ***REMOVED*** else ***REMOVED***
+            } else {
                 userProfile = loadSessionAndCurrentUser("")
-    ***REMOVED***
+            }
             val nameView = view.findViewById<TextView>(R.id.nameView)
             val rankView = view.findViewById<TextView>(R.id.rankView)
             val pointsView = view.findViewById<TextView>(R.id.pointsView)
@@ -83,50 +83,50 @@ class ProfileFragment : Fragment() ***REMOVED***
                 .into(profileImage)
 
             val githubProfileButton = view.findViewById<ImageView>(R.id.userGithub)
-            githubProfileButton.setOnClickListener ***REMOVED***
-                val githubProfileUrl = "https://github.com/$***REMOVED***userProfile[5]***REMOVED***"
+            githubProfileButton.setOnClickListener {
+                val githubProfileUrl = "https://github.com/${userProfile[5]}"
                 val intent = Intent(Intent.ACTION_VIEW, Uri.parse(githubProfileUrl))
                 startActivity(intent)
-    ***REMOVED***
-***REMOVED***
+            }
+        }
 
         val pexelAPI = BuildConfig.PEXEL_API_KEY
         val bannerImageView = view.findViewById<ImageView>(R.id.bannerImageView)
-        lifecycleScope.launch ***REMOVED***
+        lifecycleScope.launch {
             val randomBannerImageUrl = fetchRandomBannerImageUrl(pexelAPI)
             Log.d("Banner", "Banner URL: $randomBannerImageUrl")
             Glide.with(requireContext())
                 .load(randomBannerImageUrl)
                 .transition(com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withCrossFade())
                 .into(bannerImageView)
-***REMOVED***
+        }
 
         val badgeRecyclerView = view.findViewById<RecyclerView>(R.id.userBadgesRecyclerView)
-        lifecycleScope.launch ***REMOVED***
-            if (rollNumber != "") ***REMOVED***
+        lifecycleScope.launch {
+            if (rollNumber != "") {
                 userProfile = loadSessionAndCurrentUser(rollNumber)
-    ***REMOVED*** else ***REMOVED***
+            } else {
                 userProfile = loadSessionAndCurrentUser("")
-    ***REMOVED***
-            val userData: PostgrestResult = supabaseClient.from("user_badges").select ***REMOVED***
-                filter ***REMOVED***
+            }
+            val userData: PostgrestResult = supabaseClient.from("user_badges").select {
+                filter {
                     eq("roll_number", userProfile[2])
-        ***REMOVED***
-    ***REMOVED***
+                }
+            }
             val badgeList = parseBadgeData(userData.data)
             val adapter = BadgeListAdapter(badgeList)
             badgeRecyclerView.adapter = adapter
             badgeRecyclerView.layoutManager = GridLayoutManager(requireContext(), 2, LinearLayoutManager.VERTICAL, false)
 
-***REMOVED***
+        }
 
 
         val editAboutButton = view.findViewById<TextView>(R.id.userAboutEdit)
-        if (rollNumber != "") ***REMOVED***
+        if (rollNumber != "") {
             editAboutButton.visibility = View.GONE
-***REMOVED***
+        }
 
-        editAboutButton.setOnClickListener ***REMOVED***
+        editAboutButton.setOnClickListener {
             val aboutView = view.findViewById<TextView>(R.id.userAboutView)
             val aboutString = aboutView.text.toString()
 
@@ -135,105 +135,105 @@ class ProfileFragment : Fragment() ***REMOVED***
             bundle.putString("roll_number", userProfile[2].toString())
             UpdateAboutDialog(bundle)
 
-***REMOVED***
+        }
 
 
 
 
         return view
-***REMOVED***
+    }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    private suspend fun loadSessionAndCurrentUser(rollNumber:String): Array<Any> ***REMOVED***
+    private suspend fun loadSessionAndCurrentUser(rollNumber:String): Array<Any> {
 
         val session = supabaseClient.auth.sessionManager.loadSession()
         lateinit var userData: PostgrestResult
-        if (rollNumber != "") ***REMOVED***
-            userData = supabaseClient.from("users").select ***REMOVED***
-                filter ***REMOVED***
+        if (rollNumber != "") {
+            userData = supabaseClient.from("users").select {
+                filter {
                     eq("roll_number", rollNumber)
-        ***REMOVED***
-    ***REMOVED***
+                }
+            }
 
-***REMOVED***else ***REMOVED***
-            userData = supabaseClient.from("users").select ***REMOVED***
-                filter ***REMOVED***
-                    session?.user?.id?.let ***REMOVED*** eq("id", it) ***REMOVED***
-        ***REMOVED***
-    ***REMOVED***
-***REMOVED***
+        }else {
+            userData = supabaseClient.from("users").select {
+                filter {
+                    session?.user?.id?.let { eq("id", it) }
+                }
+            }
+        }
         val fetchedUser = parseUserData(userData.data)
         val githubProfileUrl = fetchedUser[0].profile_image.trim('"')
         val nameString = fetchedUser[0].name
         val rollNumberString = fetchedUser[0].roll_number
         val pointsInt = fetchedUser[0].points
         var rank = ""
-        if (pointsInt < 200) ***REMOVED***
+        if (pointsInt < 200) {
             rank = "Trainee"
-***REMOVED***else if (pointsInt < 500) ***REMOVED***
+        }else if (pointsInt < 500) {
             rank = "Avenger"
-***REMOVED***else if (pointsInt < 1000) ***REMOVED***
+        }else if (pointsInt < 1000) {
             rank = "Captain"
-***REMOVED***else if (pointsInt >= 1000) ***REMOVED***
+        }else if (pointsInt >= 1000) {
             rank = "Director"
-***REMOVED***
+        }
         val githubUserName = fetchedUser[0].username.trim('"')
-        if(fetchedUser[0].about == null || fetchedUser[0].about == "" || fetchedUser[0].about == "NULL")***REMOVED***
+        if(fetchedUser[0].about == null || fetchedUser[0].about == "" || fetchedUser[0].about == "NULL"){
             fetchedUser[0].about = "I Love Open Source Software... 💗💗💗"
-***REMOVED***
+        }
         return arrayOf(githubProfileUrl, nameString, rollNumberString, rank, pointsInt, githubUserName, fetchedUser[0].about)
-***REMOVED***
+    }
 
-    fun parseUserData(jsonString: String): List<User> ***REMOVED***
+    fun parseUserData(jsonString: String): List<User> {
         val gson = Gson()
         // Create a TypeToken for a List<User>
-        val userListType = object : TypeToken<List<User>>() ***REMOVED******REMOVED***.type
+        val userListType = object : TypeToken<List<User>>() {}.type
         return gson.fromJson(jsonString, userListType)
-***REMOVED***
+    }
 
-    suspend fun fetchRandomBannerImageUrl(apiKey: String): String? ***REMOVED***
+    suspend fun fetchRandomBannerImageUrl(apiKey: String): String? {
 
         val randomPage = Math.floor(Math.random() * 10) + 1
         val client = HttpClient()
 
-        return try ***REMOVED***
+        return try {
 
-            val response: HttpResponse = client.get("https://api.pexels.com/v1/search?query=abstract&orientation=landscape&per_page=1&page=$***REMOVED***randomPage***REMOVED***") ***REMOVED***
+            val response: HttpResponse = client.get("https://api.pexels.com/v1/search?query=abstract&orientation=landscape&per_page=1&page=${randomPage}") {
                 header(HttpHeaders.Authorization, apiKey)
                 parameter("page", randomPage)
                 parameter("per_page", 1)
-    ***REMOVED***
+            }
 
-            if (response.status.isSuccess()) ***REMOVED***
+            if (response.status.isSuccess()) {
                 val bodyString = response.bodyAsText()
 
                 val pexelsResponse = Gson().fromJson(bodyString, PexelsResponse::class.java)
 
-                if (pexelsResponse.photos.isNotEmpty()) ***REMOVED***
+                if (pexelsResponse.photos.isNotEmpty()) {
                     val imageUrl = pexelsResponse.photos.first().src.landscape
                     imageUrl
-        ***REMOVED*** else ***REMOVED***
+                } else {
                     null
-        ***REMOVED***
-    ***REMOVED*** else ***REMOVED***
+                }
+            } else {
                 null
-    ***REMOVED***
-***REMOVED*** catch (e: Exception) ***REMOVED***
+            }
+        } catch (e: Exception) {
             e.printStackTrace()
             null
-***REMOVED*** finally ***REMOVED***
+        } finally {
             client.close()
-***REMOVED***
-***REMOVED***
+        }
+    }
 
-    fun parseBadgeData(jsonString: String): List<UserBadge> ***REMOVED***
+    fun parseBadgeData(jsonString: String): List<UserBadge> {
         val gson = Gson()
         // Create a TypeToken for a List<User>
-        val userListType = object : TypeToken<List<UserBadge>>() ***REMOVED******REMOVED***.type
+        val userListType = object : TypeToken<List<UserBadge>>() {}.type
         return gson.fromJson(jsonString, userListType)
-***REMOVED***
+    }
 
-    fun UpdateAboutDialog(bundle: Bundle)***REMOVED***
+    fun UpdateAboutDialog(bundle: Bundle){
         val updateAboutDialogView = layoutInflater.inflate(R.layout.update_about_dialog, null)
         val dialog = AlertDialog.Builder(requireContext())
             .setView(updateAboutDialogView)
@@ -244,31 +244,31 @@ class ProfileFragment : Fragment() ***REMOVED***
         updateAboutDialogView.findViewById<EditText>(R.id.userAboutView).setText(aboutString)
 
         dialog.setCancelable(false)
-        updateAboutDialogView.findViewById<TextView>(R.id.dialog_cancel).setOnClickListener ***REMOVED***
+        updateAboutDialogView.findViewById<TextView>(R.id.dialog_cancel).setOnClickListener {
             dialog.dismiss()
-***REMOVED***
+        }
         dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
 
-        updateAboutDialogView.findViewById<TextView>(R.id.save_about).setOnClickListener ***REMOVED***
+        updateAboutDialogView.findViewById<TextView>(R.id.save_about).setOnClickListener {
             val aboutView = updateAboutDialogView.findViewById<TextView>(R.id.userAboutView)
             val aboutString = aboutView?.text.toString()
-            lifecycleScope.launch ***REMOVED***
+            lifecycleScope.launch {
                 val session = supabaseClient.auth.sessionManager.loadSession()
                 supabaseClient.from("users").update(
                     mapOf("about" to aboutString)
-                ) ***REMOVED***
-                    filter ***REMOVED***
-                        session?.user?.id?.let ***REMOVED*** eq("id", it) ***REMOVED***
-            ***REMOVED***
-        ***REMOVED***
+                ) {
+                    filter {
+                        session?.user?.id?.let { eq("id", it) }
+                    }
+                }
 
                 val aboutView = view?.findViewById<TextView>(R.id.userAboutView)
                 aboutView?.text = aboutString
                 dialog.dismiss()
 
-    ***REMOVED***
-***REMOVED***
+            }
+        }
         dialog.show()
-***REMOVED***
+    }
 
-***REMOVED***
+}

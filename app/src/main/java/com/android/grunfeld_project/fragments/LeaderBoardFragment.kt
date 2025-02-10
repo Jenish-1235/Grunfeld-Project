@@ -35,13 +35,13 @@ import io.github.jan.supabase.postgrest.result.PostgrestResult
 import kotlinx.coroutines.launch
 
 
-class LeaderBoardFragment : Fragment() ***REMOVED***
+class LeaderBoardFragment : Fragment() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? ***REMOVED***
+    ): View? {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_leader_board, container, false)
 
@@ -49,7 +49,7 @@ class LeaderBoardFragment : Fragment() ***REMOVED***
 
 
 
-        lifecycleScope.launch ***REMOVED***
+        lifecycleScope.launch {
             val userProfile = loadSessionAndCurrentUser()
             val leaderBoardProfile = view.findViewById<ImageView>(R.id.leaderBoardProfileImage)
             val nameView = view.findViewById<TextView>(R.id.displayNameView)
@@ -74,118 +74,118 @@ class LeaderBoardFragment : Fragment() ***REMOVED***
 
             val searchBar = view.findViewById<TextInputEditText>(R.id.searchBar)
 
-            searchBar.setOnFocusChangeListener ***REMOVED*** _, hasFocus ->
-                if (hasFocus) ***REMOVED***
+            searchBar.setOnFocusChangeListener { _, hasFocus ->
+                if (hasFocus) {
                     searchBar.text?.clear()
                     searchBar.hint = "Search for a someone special..."
-        ***REMOVED***
-    ***REMOVED***
+                }
+            }
 
 
-            searchBar.addTextChangedListener(object : TextWatcher ***REMOVED***
-                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) ***REMOVED*** ***REMOVED***
+            searchBar.addTextChangedListener(object : TextWatcher {
+                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) { }
 
-                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) ***REMOVED***
+                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                     val query = s?.toString() ?: ""
                     // Get the first letter of the query in lowercase, if available
                     val firstLetter = query.firstOrNull()?.lowercaseChar()
 
                     // Filter the users whose name contains the query text
-                    val filteredUsers = users.filter ***REMOVED*** user ->
+                    val filteredUsers = users.filter { user ->
                         user.name.contains(query, ignoreCase = true)
-            ***REMOVED***.sortedWith ***REMOVED*** a, b ->
+                    }.sortedWith { a, b ->
                         // Check whether the names start with the first letter of the query
-                        val aStartsWith = firstLetter?.let ***REMOVED*** a.name.startsWith(it, ignoreCase = true) ***REMOVED*** ?: false
-                        val bStartsWith = firstLetter?.let ***REMOVED*** b.name.startsWith(it, ignoreCase = true) ***REMOVED*** ?: false
+                        val aStartsWith = firstLetter?.let { a.name.startsWith(it, ignoreCase = true) } ?: false
+                        val bStartsWith = firstLetter?.let { b.name.startsWith(it, ignoreCase = true) } ?: false
 
-                        when ***REMOVED***
+                        when {
                             aStartsWith && !bStartsWith -> -1  // a comes first
                             !aStartsWith && bStartsWith -> 1   // b comes first
-                            else -> ***REMOVED***
+                            else -> {
                                 // If both have the same status for starting with the letter, sort by points descending
                                 val pointsDiff = b.points - a.points
-                                if (pointsDiff != 0) ***REMOVED***
+                                if (pointsDiff != 0) {
                                     pointsDiff
-                        ***REMOVED*** else ***REMOVED***
+                                } else {
                                     // If points are equal, fallback to alphabetical order
                                     a.name.compareTo(b.name, ignoreCase = true)
-                        ***REMOVED***
-                    ***REMOVED***
-                ***REMOVED***
-            ***REMOVED***
+                                }
+                            }
+                        }
+                    }
 
                     adapter.userList = filteredUsers
                     adapter.notifyDataSetChanged()
-        ***REMOVED***
+                }
 
-                override fun afterTextChanged(s: Editable?) ***REMOVED*** ***REMOVED***
-    ***REMOVED***)
-            searchBar.setOnEditorActionListener ***REMOVED*** textView, actionId, keyEvent ->
-                if (actionId == EditorInfo.IME_ACTION_SEARCH) ***REMOVED***
+                override fun afterTextChanged(s: Editable?) { }
+            })
+            searchBar.setOnEditorActionListener { textView, actionId, keyEvent ->
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                     // Hide the soft keyboard
                     val imm = requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                     imm.hideSoftInputFromWindow(searchBar.windowToken, 0)
                     // Remove focus from the search bar
                     searchBar.clearFocus()
                     true
-        ***REMOVED*** else ***REMOVED***
+                } else {
                     false
-        ***REMOVED***
-    ***REMOVED***
-***REMOVED***
+                }
+            }
+        }
 
         val userProfileCard = view.findViewById<CardView>(R.id.userProfileCard)
-        userProfileCard.setOnClickListener ***REMOVED***
+        userProfileCard.setOnClickListener {
             val parentContext = context
             val profileFragment = ProfileFragment()
-            if (parentContext != null) ***REMOVED***
+            if (parentContext != null) {
                 parentFragmentManager.beginTransaction()
                     .replace(R.id.fragment_container_view, profileFragment)
                     .addToBackStack(null)
                     .commit()
-    ***REMOVED***
-***REMOVED***
+            }
+        }
 
         return view
-***REMOVED***
+    }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    private suspend fun loadSessionAndCurrentUser(): Array<Any> ***REMOVED***
+    private suspend fun loadSessionAndCurrentUser(): Array<Any> {
         val session = supabaseClient.auth.sessionManager.loadSession()
-        val userData: PostgrestResult = supabaseClient.from("users").select ***REMOVED***
-            filter ***REMOVED***
-                session?.user?.id?.let ***REMOVED*** eq("id", it) ***REMOVED***
-    ***REMOVED***
-***REMOVED***
+        val userData: PostgrestResult = supabaseClient.from("users").select {
+            filter {
+                session?.user?.id?.let { eq("id", it) }
+            }
+        }
         val fetchedUser = parseUserData(userData.data)
         val githubProfileUrl = fetchedUser[0].profile_image.trim('"')
         val nameString = fetchedUser[0].name
         val rollNumberString = fetchedUser[0].roll_number
         val pointsInt = fetchedUser[0].points
         var rank = ""
-        if (pointsInt < 200) ***REMOVED***
+        if (pointsInt < 200) {
             rank = "Trainee"
-***REMOVED***else if (pointsInt < 500) ***REMOVED***
+        }else if (pointsInt < 500) {
             rank = "Avenger"
-***REMOVED***else if (pointsInt < 1000) ***REMOVED***
+        }else if (pointsInt < 1000) {
             rank = "Captain"
-***REMOVED***else if (pointsInt >= 1000) ***REMOVED***
+        }else if (pointsInt >= 1000) {
             rank = "Director"
-***REMOVED***
+        }
 
 
         return arrayOf(githubProfileUrl, nameString, rollNumberString, rank, pointsInt)
-***REMOVED***
+    }
 
-    private suspend fun loadAllUsers(): List<User> ***REMOVED***
+    private suspend fun loadAllUsers(): List<User> {
         val userData: PostgrestResult = supabaseClient.from("users").select()
-        return parseUserData(userData.data).sortedByDescending***REMOVED*** user -> user.points ***REMOVED***
-***REMOVED***
+        return parseUserData(userData.data).sortedByDescending{ user -> user.points }
+    }
 
-    fun parseUserData(jsonString: String): List<User> ***REMOVED***
+    fun parseUserData(jsonString: String): List<User> {
         val gson = Gson()
         // Create a TypeToken for a List<User>
-        val userListType = object : TypeToken<List<User>>() ***REMOVED******REMOVED***.type
+        val userListType = object : TypeToken<List<User>>() {}.type
         return gson.fromJson(jsonString, userListType)
-***REMOVED***
-***REMOVED***
+    }
+}

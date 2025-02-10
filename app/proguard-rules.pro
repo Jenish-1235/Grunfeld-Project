@@ -8,9 +8,9 @@
 # If your project uses WebView with JS, uncomment the following
 # and specify the fully qualified class name to the JavaScript interface
 # class:
-#-keepclassmembers class fqcn.of.javascript.interface.for.webview ***REMOVED***
+#-keepclassmembers class fqcn.of.javascript.interface.for.webview {
 #   public *;
-#***REMOVED***
+#}
 
 # Uncomment this to preserve the line number information for
 # debugging stack traces.
@@ -23,27 +23,27 @@
 # Keep `Companion` object fields of serializable classes.
 # This avoids serializer lookup through `getDeclaredClasses` as done for named companion objects.
 -if @kotlinx.serialization.Serializable class **
--keepclassmembers class <1> ***REMOVED***
+-keepclassmembers class <1> {
    static <1>$Companion Companion;
-***REMOVED***
+}
 
 # Keep `serializer()` on companion objects (both default and named) of serializable classes.
--if @kotlinx.serialization.Serializable class ** ***REMOVED***
+-if @kotlinx.serialization.Serializable class ** {
    static **$* *;
-***REMOVED***
--keepclassmembers class <2>$<3> ***REMOVED***
+}
+-keepclassmembers class <2>$<3> {
    kotlinx.serialization.KSerializer serializer(...);
-***REMOVED***
+}
 
 # Keep `INSTANCE.serializer()` of serializable objects.
--if @kotlinx.serialization.Serializable class ** ***REMOVED***
+-if @kotlinx.serialization.Serializable class ** {
    public static ** INSTANCE;
-***REMOVED***
--keepclassmembers class <1> ***REMOVED***
+}
+-keepclassmembers class <1> {
    public static <1> INSTANCE;
    kotlinx.serialization.KSerializer serializer(...);
-***REMOVED***
--keep class com.android.grunfeld_project.models.User$$serializer ***REMOVED*** *; ***REMOVED***
+}
+-keep class com.android.grunfeld_project.models.User$$serializer { *; }
 
 # @Serializable and @Polymorphic are used at runtime for polymorphic serialization.
 -keepattributes RuntimeVisibleAnnotations,AnnotationDefault

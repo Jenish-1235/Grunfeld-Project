@@ -40,33 +40,33 @@ import java.util.ConcurrentModificationException
 import java.util.UUID
 
 @RequiresApi(Build.VERSION_CODES.O)
-class AuthActivity : AppCompatActivity() ***REMOVED***
+class AuthActivity : AppCompatActivity() {
 
     private val supabaseClient = SupabaseClient.supabaseClient
 
-    override fun onCreate(savedInstanceState: Bundle?) ***REMOVED***
+    override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_auth)
         // Apply window insets for proper layout.
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) ***REMOVED*** v, insets ->
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
-***REMOVED***
+        }
         window.statusBarColor = getColor(R.color.black)
 
         // Check if this activity was launched as a deep link callback.
         val data: Uri? = intent?.data
-        if (data != null && data.scheme == "myapp" && data.host == "callback") ***REMOVED***
-            supabaseClient.handleDeeplinks(intent, onSessionSuccess = ***REMOVED*** session ->
-                lifecycleScope.launch ***REMOVED***
+        if (data != null && data.scheme == "myapp" && data.host == "callback") {
+            supabaseClient.handleDeeplinks(intent, onSessionSuccess = { session ->
+                lifecycleScope.launch {
                     updateUserData(session)
                     markUserAsLoggedIn()
                     navigateToMainActivity()
-        ***REMOVED***
-    ***REMOVED***)
+                }
+            })
             return
-***REMOVED***
+        }
 
         // Otherwise, display the login UI.
         val nameInput = findViewById<TextInputEditText>(R.id.nameInput)
@@ -79,54 +79,54 @@ class AuthActivity : AppCompatActivity() ***REMOVED***
         val adapter = ArrayAdapter(this, R.layout.custom_dropdown_item, academicYears)
         batchYearInput.setAdapter(adapter)
         batchYearInput.threshold = 1
-        batchYearInput.setOnClickListener ***REMOVED*** batchYearInput.showDropDown() ***REMOVED***
+        batchYearInput.setOnClickListener { batchYearInput.showDropDown() }
 
-        loginButton.setOnClickListener ***REMOVED***
+        loginButton.setOnClickListener {
             val name = nameInput.text.toString().trim()
             val rollNumber = rollNumberInput.text.toString().trim()
             val batchYear = batchYearInput.text.toString().trim()
 
-            if (name.isNotEmpty() && rollNumber.isNotEmpty() && batchYear.isNotEmpty()) ***REMOVED***
-                if (rollNumber.length != 5) ***REMOVED***
+            if (name.isNotEmpty() && rollNumber.isNotEmpty() && batchYear.isNotEmpty()) {
+                if (rollNumber.length != 5) {
                     rollNumberInput.error = "Roll number must be 5 characters long"
                     showToast("Roll number must be 5 characters long")
                     return@setOnClickListener
-        ***REMOVED***
+                }
 
                 // Save extra user info in SharedPreferences.
                 val prefs = getSharedPreferences("user_extra_info", Context.MODE_PRIVATE)
-                prefs.edit().apply ***REMOVED***
+                prefs.edit().apply {
                     putString("username", name)
                     putString("rollNumber", rollNumber)
                     putString("academicYear", batchYear)
                     apply()
-        ***REMOVED***
+                }
 
                 // Initiate GitHub OAuth login.
-                lifecycleScope.launch ***REMOVED***
+                lifecycleScope.launch {
                     loginWithGitHub()
-        ***REMOVED***
-    ***REMOVED*** else ***REMOVED***
+                }
+            } else {
                 if (name.isEmpty()) nameInput.error = "Name cannot be empty"
                 if (rollNumber.isEmpty()) rollNumberInput.error = "Roll number cannot be empty"
                 if (batchYear.isEmpty()) batchYearInput.error = "Batch year cannot be empty"
-    ***REMOVED***
-***REMOVED***
-***REMOVED***
+            }
+        }
+    }
 
-    private suspend fun loginWithGitHub() ***REMOVED***
-        try ***REMOVED***
+    private suspend fun loginWithGitHub() {
+        try {
             supabaseClient.auth.signInWith(
                 provider = Github,
                 redirectUrl = "myapp://callback"
             )
-***REMOVED*** catch (e: Exception) ***REMOVED***
+        } catch (e: Exception) {
             e.printStackTrace()
-            showToast("Error during login: $***REMOVED***e.message***REMOVED***")
-***REMOVED***
-***REMOVED***
+            showToast("Error during login: ${e.message}")
+        }
+    }
     @RequiresApi(Build.VERSION_CODES.O)
-    private suspend fun updateUserData(session: UserSession) ***REMOVED***
+    private suspend fun updateUserData(session: UserSession) {
         // Retrieve extra user details.
         val prefs = getSharedPreferences("user_extra_info", Context.MODE_PRIVATE)
         val name = prefs.getString("username", "unknown") ?: "unknown"
@@ -162,54 +162,54 @@ class AuthActivity : AppCompatActivity() ***REMOVED***
         editor.putString("name", name)
         editor.apply()
 
-        try ***REMOVED***
-            val existingUser = supabaseClient.from("users").select ***REMOVED***
-                    filter ***REMOVED*** eq("id", session.user!!.id) ***REMOVED***
-        ***REMOVED***
-            if (existingUser.data.length == 2) ***REMOVED***
-                supabaseClient.from("users").insert(newUserJson) ***REMOVED******REMOVED***
-    ***REMOVED***
+        try {
+            val existingUser = supabaseClient.from("users").select {
+                    filter { eq("id", session.user!!.id) }
+                }
+            if (existingUser.data.length == 2) {
+                supabaseClient.from("users").insert(newUserJson) {}
+            }
 
-***REMOVED*** catch (e: Exception) ***REMOVED***
-            Log.e("updateUserData", "Error inserting user data: $***REMOVED***e.message***REMOVED***")
+        } catch (e: Exception) {
+            Log.e("updateUserData", "Error inserting user data: ${e.message}")
             e.printStackTrace()
-***REMOVED***
-***REMOVED***
+        }
+    }
 
-    private fun markUserAsLoggedIn() ***REMOVED***
+    private fun markUserAsLoggedIn() {
         val loginPrefs = getSharedPreferences("loginPrefs", Context.MODE_PRIVATE)
         loginPrefs.edit().putBoolean("isLoggedIn", true).apply()
-***REMOVED***
+    }
 
-    private fun navigateToMainActivity() ***REMOVED***
-        val intent = Intent(this, MainActivity::class.java).apply ***REMOVED***
+    private fun navigateToMainActivity() {
+        val intent = Intent(this, MainActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
-***REMOVED***
+        }
         startActivity(intent)
         finish()
-***REMOVED***
+    }
 
-    private fun showToast(message: String) ***REMOVED***
+    private fun showToast(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_LONG).show()
-***REMOVED***
+    }
 
-    override fun dispatchTouchEvent(ev: MotionEvent): Boolean ***REMOVED***
-        if (ev.action == MotionEvent.ACTION_DOWN) ***REMOVED***
+    override fun dispatchTouchEvent(ev: MotionEvent): Boolean {
+        if (ev.action == MotionEvent.ACTION_DOWN) {
             // Get the view that currently has focus
             val v = currentFocus
-            if (v is EditText) ***REMOVED***
+            if (v is EditText) {
                 // Create a rectangle outRect of the focused view
                 val outRect = Rect()
                 v.getGlobalVisibleRect(outRect)
                 // If the touch event is outside the focused view, clear focus and hide keyboard
-                if (!outRect.contains(ev.rawX.toInt(), ev.rawY.toInt())) ***REMOVED***
+                if (!outRect.contains(ev.rawX.toInt(), ev.rawY.toInt())) {
                     v.clearFocus()
                     val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                     imm.hideSoftInputFromWindow(v.windowToken, 0)
-        ***REMOVED***
-    ***REMOVED***
-***REMOVED***
+                }
+            }
+        }
         return super.dispatchTouchEvent(ev)
-***REMOVED***
+    }
 
-***REMOVED***
+}

@@ -1,18 +1,18 @@
 import java.util.Properties
 
-plugins ***REMOVED***
+plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android) version "2.1.0"
     kotlin("plugin.serialization") version "1.8.20"
     id("kotlin-kapt")
     id("com.google.gms.google-services")
-***REMOVED***
+}
 
-android ***REMOVED***
+android {
     namespace = "com.android.grunfeld_project"
     compileSdk = 35
 
-    defaultConfig ***REMOVED***
+    defaultConfig {
         applicationId = "com.android.grunfeld_project"
         minSdk = 24
         targetSdk = 35
@@ -20,36 +20,36 @@ android ***REMOVED***
         versionName = "1.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
-        val properties = Properties().apply ***REMOVED***
+        val properties = Properties().apply {
             load(rootProject.file("local.properties").inputStream())
-***REMOVED***
-        buildConfigField("String", "BASE_URL", "\"$***REMOVED***properties.getProperty("supabase.url")***REMOVED***\"")
-        buildConfigField("String", "ANON_KEY", "\"$***REMOVED***properties.getProperty("supabase.anon.key")***REMOVED***\"")
-        buildConfigField("String", "PEXEL_API_KEY", "\"$***REMOVED***properties.getProperty("pexels.api.key")***REMOVED***\"")
-***REMOVED***
+        }
+        buildConfigField("String", "BASE_URL", "\"${properties.getProperty("supabase.url")}\"")
+        buildConfigField("String", "ANON_KEY", "\"${properties.getProperty("supabase.anon.key")}\"")
+        buildConfigField("String", "PEXEL_API_KEY", "\"${properties.getProperty("pexels.api.key")}\"")
+    }
 
-    buildTypes ***REMOVED***
-        release ***REMOVED***
+    buildTypes {
+        release {
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
-***REMOVED***
-***REMOVED***
-    compileOptions ***REMOVED***
+        }
+    }
+    compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
-***REMOVED***
-    kotlinOptions ***REMOVED***
+    }
+    kotlinOptions {
         jvmTarget = "11"
-***REMOVED***
-    buildFeatures ***REMOVED***
+    }
+    buildFeatures {
         buildConfig = true
-***REMOVED***
-***REMOVED***
+    }
+}
 
-dependencies ***REMOVED***
+dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
@@ -79,4 +79,4 @@ dependencies ***REMOVED***
     implementation("androidx.core:core-splashscreen:1.0.0")
 
 
-***REMOVED***
+}

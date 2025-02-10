@@ -6,18 +6,18 @@ import io.github.jan.supabase.auth.Auth
 import io.github.jan.supabase.createSupabaseClient
 import io.github.jan.supabase.postgrest.Postgrest
 
-object SupabaseClient ***REMOVED***
+object SupabaseClient {
 
-    val supabaseClient: SupabaseClient by lazy ***REMOVED***
+    val supabaseClient: SupabaseClient by lazy {
         createSupabaseClient(
             supabaseUrl = BuildConfig.BASE_URL,
             supabaseKey = BuildConfig.ANON_KEY
-        ) ***REMOVED***
-            install(Auth)***REMOVED***
+        ) {
+            install(Auth){
                 host = "callback"
                 scheme = "myapp"
-    ***REMOVED***
+            }
             install(Postgrest)
-***REMOVED***
-***REMOVED***
-***REMOVED***
+        }
+    }
+}

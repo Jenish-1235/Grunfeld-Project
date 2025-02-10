@@ -8,28 +8,28 @@ import androidx.recyclerview.widget.RecyclerView
 import com.android.grunfeld_project.R
 import com.android.grunfeld_project.models.Event
 
-class EventListAdapter(private val eventList: List<Event>) : RecyclerView.Adapter<EventListAdapter.ViewHolder>() ***REMOVED***
-    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)***REMOVED***
+class EventListAdapter(private val eventList: List<Event>) : RecyclerView.Adapter<EventListAdapter.ViewHolder>() {
+    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
         val eventTitleView = itemView.findViewById<TextView>(R.id.eventTitleView)
         val instructorView = itemView.findViewById<TextView>(R.id.instructorView)
         val timeView = itemView.findViewById<TextView>(R.id.timeView)
         val locationView = itemView.findViewById<TextView>(R.id.locationView)
-***REMOVED***
+    }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder ***REMOVED***
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val itemView = LayoutInflater.from(parent.context).inflate(R.layout.list_item_schedule, parent, false)
         return ViewHolder(itemView)
-***REMOVED***
+    }
 
-    override fun getItemCount(): Int ***REMOVED***
+    override fun getItemCount(): Int {
         return eventList.size
-***REMOVED***
+    }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) ***REMOVED***
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val event = eventList[position]
         holder.eventTitleView.text = event.class_name
         holder.instructorView.text = event.instructor
         holder.timeView.text = event.time
         holder.locationView.text = event.room
-***REMOVED***
-***REMOVED***
+    }
+}

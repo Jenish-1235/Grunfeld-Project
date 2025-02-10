@@ -42,31 +42,31 @@ import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.JsonPrimitive
 
 
-class MainActivity : AppCompatActivity() ***REMOVED***
-    companion object ***REMOVED***
+class MainActivity : AppCompatActivity() {
+    companion object {
         const val PREFS_NAME = "notificationPrefs"
         const val KEY_WENT_TO_SETTINGS = "wentToSettings"
-***REMOVED***
+    }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    override fun onCreate(savedInstanceState: Bundle?) ***REMOVED***
+    override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         enableEdgeToEdge()
 
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) ***REMOVED*** v, insets ->
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
-***REMOVED***
+        }
 
         window.statusBarColor = Color.BLACK
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) ***REMOVED***
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             val decor = window.decorView
             var flags = decor.systemUiVisibility
             flags = flags and View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR.inv()
             decor.systemUiVisibility = flags
-***REMOVED***
+        }
         WindowInsetsControllerCompat(window, window.decorView).isAppearanceLightStatusBars = false
 
 
@@ -74,30 +74,30 @@ class MainActivity : AppCompatActivity() ***REMOVED***
         val isLoggedIn = loginPrefs.getBoolean("isLoggedIn", false)
         val isNotificationDenied = getSharedPreferences("isNotificationDenied", MODE_PRIVATE)
 
-        if (!isLoggedIn) ***REMOVED***
+        if (!isLoggedIn) {
             startActivity(Intent(this, AuthActivity::class.java))
             finish()
-***REMOVED***else***REMOVED***
+        }else{
 
-            if(!NotificationManagerCompat.from(this).areNotificationsEnabled() && !isNotificationDenied.getBoolean("isDenied", false))***REMOVED***
+            if(!NotificationManagerCompat.from(this).areNotificationsEnabled() && !isNotificationDenied.getBoolean("isDenied", false)){
                 showNotificationDialog()
-                lifecycleScope.launch ***REMOVED***
+                lifecycleScope.launch {
                     val githubProfile = sessionReloadAndUpdateProfile()
                     bottomNavBar(githubProfile)
                     updateTokenAfterLogin()
-        ***REMOVED***
-    ***REMOVED***else ***REMOVED***
-                lifecycleScope.launch ***REMOVED***
+                }
+            }else {
+                lifecycleScope.launch {
                     val githubProfile = sessionReloadAndUpdateProfile()
                     bottomNavBar(githubProfile)
                     updateTokenAfterLogin()
-        ***REMOVED***
-    ***REMOVED***
-***REMOVED***
-***REMOVED***
+                }
+            }
+        }
+    }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    private suspend fun sessionReloadAndUpdateProfile():String***REMOVED***
+    private suspend fun sessionReloadAndUpdateProfile():String{
         val session = supabaseClient.auth.sessionManager.loadSession()
         val user = session?.user?.userMetadata
         val rawGithubProfile: JsonElement? = user?.get("avatar_url")  // expected to be a JsonElement
@@ -110,9 +110,9 @@ class MainActivity : AppCompatActivity() ***REMOVED***
         Log.d("profile url", "Extracted URL: $githubProfileUrl")
 
         return githubProfileUrl
-***REMOVED***
+    }
 
-    fun bottomNavBar(githubProfile: String) ***REMOVED***
+    fun bottomNavBar(githubProfile: String) {
         // Your implementation for bottom navigation bar.
         val tabLayout = findViewById<TabLayout>(R.id.tabLayout)
         tabLayout.setSelectedTabIndicatorColor(Color.WHITE)
@@ -156,11 +156,11 @@ class MainActivity : AppCompatActivity() ***REMOVED***
             .into(profileIcon)
         tabLayout.addTab(profileTab)
 
-        tabLayout.addOnTabSelectedListener(object : OnTabSelectedListener ***REMOVED***
+        tabLayout.addOnTabSelectedListener(object : OnTabSelectedListener {
             @SuppressLint("ResourceAsColor")
-            override fun onTabSelected(tab: TabLayout.Tab?) ***REMOVED***
-                when (tab?.position) ***REMOVED***
-                    0 -> ***REMOVED***
+            override fun onTabSelected(tab: TabLayout.Tab?) {
+                when (tab?.position) {
+                    0 -> {
                         val leaderBoardFragment = LeaderBoardFragment()
                         supportFragmentManager.beginTransaction()
                             .replace(R.id.fragment_container_view, leaderBoardFragment)
@@ -169,8 +169,8 @@ class MainActivity : AppCompatActivity() ***REMOVED***
                         leaderBoardTabIcon.imageTintList = getColorStateList(R.color.blue)
                         scheduleTabIcon.imageTintList = getColorStateList(R.color.gray)
                         devPostsTabIcon.imageTintList = getColorStateList(R.color.gray)
-            ***REMOVED***
-                    1 -> ***REMOVED***
+                    }
+                    1 -> {
                         val scheduleFragment = ScheduleFragment()
                         supportFragmentManager.beginTransaction()
                             .replace(R.id.fragment_container_view, scheduleFragment)
@@ -179,8 +179,8 @@ class MainActivity : AppCompatActivity() ***REMOVED***
                         leaderBoardTabIcon.imageTintList = getColorStateList(R.color.gray)
                         scheduleTabIcon.imageTintList = getColorStateList(R.color.blue)
                         devPostsTabIcon.imageTintList = getColorStateList(R.color.gray)
-            ***REMOVED***
-                    2 -> ***REMOVED***
+                    }
+                    2 -> {
                         val devPostsFragment = DevPostsFragment()
                         supportFragmentManager.beginTransaction()
                             .replace(R.id.fragment_container_view, devPostsFragment)
@@ -189,8 +189,8 @@ class MainActivity : AppCompatActivity() ***REMOVED***
                         leaderBoardTabIcon.imageTintList = getColorStateList(R.color.gray)
                         scheduleTabIcon.imageTintList = getColorStateList(R.color.gray)
                         devPostsTabIcon.imageTintList = getColorStateList(R.color.blue)
-            ***REMOVED***
-                    3 -> ***REMOVED***
+                    }
+                    3 -> {
 
                         val bundle = Bundle()
                         bundle.putString("roll_number", "")
@@ -203,16 +203,16 @@ class MainActivity : AppCompatActivity() ***REMOVED***
                         scheduleTabIcon.imageTintList = getColorStateList(R.color.gray)
                         devPostsTabIcon.imageTintList = getColorStateList(R.color.gray)
 
-            ***REMOVED***
-        ***REMOVED***
-    ***REMOVED***
+                    }
+                }
+            }
 
-            override fun onTabUnselected(tab: TabLayout.Tab?) ***REMOVED***
-    ***REMOVED***
+            override fun onTabUnselected(tab: TabLayout.Tab?) {
+            }
 
-            override fun onTabReselected(tab: TabLayout.Tab?) ***REMOVED***
-                when (tab?.position) ***REMOVED***
-                    0 -> ***REMOVED***
+            override fun onTabReselected(tab: TabLayout.Tab?) {
+                when (tab?.position) {
+                    0 -> {
                         val leaderBoardFragment = LeaderBoardFragment()
                         supportFragmentManager.beginTransaction()
                             .replace(R.id.fragment_container_view, leaderBoardFragment)
@@ -221,8 +221,8 @@ class MainActivity : AppCompatActivity() ***REMOVED***
                         leaderBoardTabIcon.imageTintList = getColorStateList(R.color.blue)
                         scheduleTabIcon.imageTintList = getColorStateList(R.color.gray)
                         devPostsTabIcon.imageTintList = getColorStateList(R.color.gray)
-            ***REMOVED***
-                    1 -> ***REMOVED***
+                    }
+                    1 -> {
                         val scheduleFragment = ScheduleFragment()
                         supportFragmentManager.beginTransaction()
                             .replace(R.id.fragment_container_view, scheduleFragment)
@@ -231,8 +231,8 @@ class MainActivity : AppCompatActivity() ***REMOVED***
                         leaderBoardTabIcon.imageTintList = getColorStateList(R.color.gray)
                         scheduleTabIcon.imageTintList = getColorStateList(R.color.blue)
                         devPostsTabIcon.imageTintList = getColorStateList(R.color.gray)
-            ***REMOVED***
-                    2 -> ***REMOVED***
+                    }
+                    2 -> {
                         val devPostsFragment = DevPostsFragment()
                         supportFragmentManager.beginTransaction()
                             .replace(R.id.fragment_container_view, devPostsFragment)
@@ -241,8 +241,8 @@ class MainActivity : AppCompatActivity() ***REMOVED***
                         leaderBoardTabIcon.imageTintList = getColorStateList(R.color.gray)
                         scheduleTabIcon.imageTintList = getColorStateList(R.color.gray)
                         devPostsTabIcon.imageTintList = getColorStateList(R.color.blue)
-            ***REMOVED***
-                    3 -> ***REMOVED***
+                    }
+                    3 -> {
                         val profileFragment = ProfileFragment()
                         supportFragmentManager.beginTransaction()
                             .replace(R.id.fragment_container_view, profileFragment)
@@ -252,48 +252,48 @@ class MainActivity : AppCompatActivity() ***REMOVED***
                         scheduleTabIcon.imageTintList = getColorStateList(R.color.gray)
                         devPostsTabIcon.imageTintList = getColorStateList(R.color.gray)
 
-            ***REMOVED***
-        ***REMOVED***
-    ***REMOVED***
-***REMOVED***)
+                    }
+                }
+            }
+        })
         scheduleTab.select()
 
-***REMOVED***
+    }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    override fun onResume() ***REMOVED***
+    override fun onResume() {
         super.onResume()
 
         val prefs = getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
-        if (prefs.getBoolean(KEY_WENT_TO_SETTINGS, false)) ***REMOVED***
+        if (prefs.getBoolean(KEY_WENT_TO_SETTINGS, false)) {
 
             val notificationsEnabled = NotificationManagerCompat.from(this).areNotificationsEnabled()
-            if (notificationsEnabled) ***REMOVED***
+            if (notificationsEnabled) {
                 prefs.edit().remove(KEY_WENT_TO_SETTINGS).apply()
-                lifecycleScope.launch ***REMOVED***
+                lifecycleScope.launch {
                     val githubProfile = sessionReloadAndUpdateProfile()
                     bottomNavBar(githubProfile)
                     updateTokenAfterLogin()
-        ***REMOVED***
-    ***REMOVED***
-***REMOVED***
-***REMOVED***
+                }
+            }
+        }
+    }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    private fun showNotificationDialog()***REMOVED***
+    private fun showNotificationDialog(){
         val dialogView = layoutInflater.inflate(R.layout.notification_permission_dialog, null)
         val dialog = AlertDialog.Builder(this)
             .setView(dialogView)
             .create()
 
         dialog.setCancelable(false)
-        dialogView.findViewById<Button>(R.id.dialog_cancel).setOnClickListener ***REMOVED***
+        dialogView.findViewById<Button>(R.id.dialog_cancel).setOnClickListener {
             dialog.dismiss()
             var isNotificationDenied = getSharedPreferences("isNotificationDenied", MODE_PRIVATE)
             isNotificationDenied.edit().putBoolean("isDenied", true).apply()
-***REMOVED***
+        }
 
-        dialogView.findViewById<Button>(R.id.dialog_settings).setOnClickListener ***REMOVED***
+        dialogView.findViewById<Button>(R.id.dialog_settings).setOnClickListener {
             val prefs = getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
             prefs.edit().putBoolean(KEY_WENT_TO_SETTINGS, true).apply()
 
@@ -302,54 +302,54 @@ class MainActivity : AppCompatActivity() ***REMOVED***
             intent.putExtra(Settings.EXTRA_APP_PACKAGE, packageName)
             startActivity(intent)
             dialog.dismiss()
-***REMOVED***
+        }
         dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
         dialog.show()
-***REMOVED***
+    }
 
-    private fun updateTokenAfterLogin() ***REMOVED***
-        FirebaseMessaging.getInstance().token.addOnCompleteListener ***REMOVED*** task ->
-            if (!task.isSuccessful) ***REMOVED***
+    private fun updateTokenAfterLogin() {
+        FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
+            if (!task.isSuccessful) {
                 Log.w("AuthActivity", "Fetching FCM registration token failed", task.exception)
                 return@addOnCompleteListener
-    ***REMOVED***
+            }
             val token = task.result
             updateUserFCM(token)
-***REMOVED***
-***REMOVED***
+        }
+    }
 
-    private fun updateUserFCM(token: String) ***REMOVED***
-        CoroutineScope(Dispatchers.IO).launch ***REMOVED***
-            try ***REMOVED***
+    private fun updateUserFCM(token: String) {
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
                 val session = supabaseClient.auth.sessionManager.loadSession()
-                if (session?.user?.id == null) ***REMOVED***
+                if (session?.user?.id == null) {
                     Log.d("MainActivity", "No user logged in. Skipping token update.")
                     return@launch
-        ***REMOVED***
+                }
                 val userId = session.user!!.id
                 val payload = mapOf("user_id" to userId, "fcm_token" to token)
 
-                val selectResponse = supabaseClient.from("user_tokens").select***REMOVED***
-                    filter ***REMOVED***
+                val selectResponse = supabaseClient.from("user_tokens").select{
+                    filter {
                         eq("user_id", userId)
-            ***REMOVED***
-        ***REMOVED***
+                    }
+                }
 
-                if (selectResponse.data != null && selectResponse.data.toString().isNotEmpty() && selectResponse.data.toString() != "[]") ***REMOVED***
-                    supabaseClient.from("user_tokens").update(payload) ***REMOVED***
-                        filter ***REMOVED***
+                if (selectResponse.data != null && selectResponse.data.toString().isNotEmpty() && selectResponse.data.toString() != "[]") {
+                    supabaseClient.from("user_tokens").update(payload) {
+                        filter {
                             eq("user_id", userId)
-                ***REMOVED***
-            ***REMOVED***
-        ***REMOVED*** else ***REMOVED***
+                        }
+                    }
+                } else {
                    supabaseClient.from("user_tokens").insert(payload)
 
-        ***REMOVED***
-    ***REMOVED*** catch (e: Exception) ***REMOVED***
-                Log.e("MainActivity", "Error updating user token: $***REMOVED***e.message***REMOVED***")
-    ***REMOVED***
-***REMOVED***
-***REMOVED***
+                }
+            } catch (e: Exception) {
+                Log.e("MainActivity", "Error updating user token: ${e.message}")
+            }
+        }
+    }
 
-***REMOVED***
+}

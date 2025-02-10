@@ -1,23 +1,23 @@
-pluginManagement ***REMOVED***
-    repositories ***REMOVED***
-        google ***REMOVED***
-            content ***REMOVED***
+pluginManagement {
+    repositories {
+        google {
+            content {
                 includeGroupByRegex("com\\.android.*")
                 includeGroupByRegex("com\\.google.*")
                 includeGroupByRegex("androidx.*")
-    ***REMOVED***
-***REMOVED***
+            }
+        }
         mavenCentral()
         gradlePluginPortal()
-***REMOVED***
-***REMOVED***
-dependencyResolutionManagement ***REMOVED***
+    }
+}
+dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
-    repositories ***REMOVED***
+    repositories {
         google()
         mavenCentral()
-***REMOVED***
-***REMOVED***
+    }
+}
 
 rootProject.name = "Grunfeld-Project"
 include(":app")

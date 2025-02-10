@@ -29,18 +29,18 @@ import java.time.format.DateTimeFormatter
 import java.time.format.TextStyle
 import java.util.Locale
 
-class ScheduleFragment : Fragment() ***REMOVED***
+class ScheduleFragment : Fragment() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? ***REMOVED***
+    ): View? {
         val view = inflater.inflate(R.layout.fragment_schedule, container, false)
         val dateSelectionRecyclerView = view.findViewById<RecyclerView>(R.id.dateSelectionRecyclerView)
         val eventRecyclerView = view.findViewById<RecyclerView>(R.id.scheduleRecyclerView)
 
-        lifecycleScope.launch ***REMOVED***
+        lifecycleScope.launch {
             val events = loadSchedule()
 
             // Define your date formatters (input & output)
@@ -52,14 +52,14 @@ class ScheduleFragment : Fragment() ***REMOVED***
             val weekLater = today.plusDays(6)
 
             // Collect unique event dates (as LocalDate) that fall between today and weekLater
-            val upcomingEventDates = events.mapNotNull ***REMOVED*** event ->
-                try ***REMOVED***
+            val upcomingEventDates = events.mapNotNull { event ->
+                try {
                     val eventDate = LocalDate.parse(event.schedule_date, inputFormatter)
                     if (!eventDate.isBefore(today) && !eventDate.isAfter(weekLater)) eventDate else null
-        ***REMOVED*** catch (e: Exception) ***REMOVED***
+                } catch (e: Exception) {
                     null
-        ***REMOVED***
-    ***REMOVED***.distinct().sorted()
+                }
+            }.distinct().sorted()
 
             // Prepare lists for the date selection RecyclerView:
             // - displayDateList: formatted as "DAYDDth" (e.g., "Mon03rd")
@@ -67,84 +67,84 @@ class ScheduleFragment : Fragment() ***REMOVED***
             val displayDateList = mutableListOf<String>()
             val actualDateList = mutableListOf<String>()
 
-            for (date in upcomingEventDates) ***REMOVED***
+            for (date in upcomingEventDates) {
                 val dayOfWeek = date.dayOfWeek.getDisplayName(TextStyle.SHORT, Locale.getDefault())
                 val dayOfMonth = date.dayOfMonth
                 val dayPadded = String.format("%02d", dayOfMonth)
-                val suffix = if (dayOfMonth in 11..13) ***REMOVED***
+                val suffix = if (dayOfMonth in 11..13) {
                     "th"
-        ***REMOVED*** else ***REMOVED***
-                    when (dayOfMonth % 10) ***REMOVED***
+                } else {
+                    when (dayOfMonth % 10) {
                         1 -> "st"
                         2 -> "nd"
                         3 -> "rd"
                         else -> "th"
-            ***REMOVED***
-        ***REMOVED***
+                    }
+                }
                 // Create the formatted display string (e.g., "Mon03rd")
                 displayDateList.add("$dayOfWeek$dayPadded$suffix")
                 // Save the actual date string (e.g., "2025-02-03")
                 actualDateList.add(date.format(outputFormatter))
-    ***REMOVED***
+            }
 
             // Set up the date selection RecyclerView only if there are dates to show.
-            if (displayDateList.isEmpty()) ***REMOVED***
+            if (displayDateList.isEmpty()) {
                 val noClassesMessage = view.findViewById<TextView>(R.id.noClassesMessage)
                 noClassesMessage.visibility = View.VISIBLE
-    ***REMOVED*** else ***REMOVED***
+            } else {
 
                 val dateSelectionAdapter = DateSelectionListAdapter(displayDateList)
-                dateSelectionAdapter.onDateSelected = ***REMOVED*** position ->
+                dateSelectionAdapter.onDateSelected = { position ->
                     val selectedDate = actualDateList[position]
-                    val filteredEvents = events.filter ***REMOVED*** event ->
+                    val filteredEvents = events.filter { event ->
                         event.schedule_date == selectedDate
-            ***REMOVED***
-                    if (filteredEvents.isEmpty()) ***REMOVED***
+                    }
+                    if (filteredEvents.isEmpty()) {
 
-            ***REMOVED***
+                    }
                     eventRecyclerView.adapter = EventListAdapter(filteredEvents)
-        ***REMOVED***
+                }
                 dateSelectionRecyclerView.adapter = dateSelectionAdapter
                 dateSelectionRecyclerView.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-    ***REMOVED***
+            }
 
             // --- Initial Filtering ---
             val todayFormatted = today.format(outputFormatter)
-            val initialFilteredEvents = events.filter ***REMOVED*** event ->
+            val initialFilteredEvents = events.filter { event ->
                 event.schedule_date == todayFormatted
-    ***REMOVED***
-            if (initialFilteredEvents.isEmpty()) ***REMOVED***
+            }
+            if (initialFilteredEvents.isEmpty()) {
                 // show the most recent upcoming event
-                val mostRecentEvent = events.minByOrNull ***REMOVED*** event ->
+                val mostRecentEvent = events.minByOrNull { event ->
                     LocalDate.parse(event.schedule_date, inputFormatter)
-        ***REMOVED***
-                if (mostRecentEvent != null) ***REMOVED***
+                }
+                if (mostRecentEvent != null) {
                     eventRecyclerView.adapter = EventListAdapter(listOf(mostRecentEvent))
                     eventRecyclerView.layoutManager = LinearLayoutManager(requireContext())
-        ***REMOVED***
-    ***REMOVED***else ***REMOVED***
+                }
+            }else {
                 eventRecyclerView.layoutManager = LinearLayoutManager(requireContext())
                 eventRecyclerView.adapter = EventListAdapter(initialFilteredEvents)
-    ***REMOVED***
-***REMOVED***
+            }
+        }
 
         val pastClassesButton = view.findViewById<TextView>(R.id.pastClassesButton)
-        pastClassesButton.setOnClickListener ***REMOVED***
+        pastClassesButton.setOnClickListener {
             val youtube = "https://www.youtube.com/@grunfeldproject"
             val intent = Intent(Intent.ACTION_VIEW, Uri.parse(youtube))
             startActivity(intent)
-***REMOVED***
+        }
         return view
-***REMOVED***
+    }
 
-    private suspend fun loadSchedule(): List<Event> ***REMOVED***
+    private suspend fun loadSchedule(): List<Event> {
         val eventData: PostgrestResult = supabaseClient.from("class_schedule").select()
         return parseEventData(eventData.data)
-***REMOVED***
+    }
 
-    private fun parseEventData(jsonString: String): List<Event> ***REMOVED***
+    private fun parseEventData(jsonString: String): List<Event> {
         val gson = Gson()
-        val eventListType = object : TypeToken<List<Event>>() ***REMOVED******REMOVED***.type
+        val eventListType = object : TypeToken<List<Event>>() {}.type
         return gson.fromJson(jsonString, eventListType)
-***REMOVED***
-***REMOVED***
+    }
+}

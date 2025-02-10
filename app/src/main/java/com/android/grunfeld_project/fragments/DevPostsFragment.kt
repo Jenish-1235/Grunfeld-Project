@@ -7,13 +7,13 @@ import android.view.View
 import android.view.ViewGroup
 import com.android.grunfeld_project.R
 
-class DevPostsFragment : Fragment() ***REMOVED***
+class DevPostsFragment : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? ***REMOVED***
+    ): View? {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_dev_posts, container, false)
-***REMOVED***
-***REMOVED***
+    }
+}
