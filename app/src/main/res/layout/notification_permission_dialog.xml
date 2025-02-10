@@ -5,21 +5,22 @@
     android:layout_width="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     app:cardCornerRadius="20dp"
-    android:background="@android:color/transparent">
+    android:layout_margin="15dp"
+    android:background="@android:color/transparent"
+    android:elevation="10dp">
 <LinearLayout
-
     android:id="@+id/dialog_layout_root"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="#111111"
+    android:background="@color/gray"
     android:orientation="vertical"
-    android:padding="24dp">
+    android:padding="15dp">
 
     <!-- Title -->
     <TextView
         android:id="@+id/dialog_title"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:text="Enable Notifications"
         android:textColor="@color/white"
         android:textSize="20sp"
@@ -33,9 +34,9 @@
         android:id="@+id/dialog_message"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Notifications are barrier in communication 😒🥲 !!! \nPlease turn them on... 🥺🥺"
+        android:text="Turning on notifications is like saying 'I love you' in the digital world. 🥹💖 \n\nAnd right now… we’re waiting for you to say it. 😭💬"
         android:textColor="@color/white"
-        android:textSize="16sp"
+        android:textSize="15sp"
         android:paddingBottom="16dp"/>
 
     <!-- Buttons container -->
@@ -48,20 +49,23 @@
         <!-- Cancel Button -->
         <Button
             android:id="@+id/dialog_cancel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Cancel"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="Go Away...😠"
             android:textColor="@color/white"
-            android:background="?attr/selectableItemBackgroundBorderless" />
+            android:backgroundTint="@color/gray"
+            android:layout_weight="1.4"/>
 
         <!-- Open Settings Button -->
         <Button
             android:id="@+id/dialog_settings"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Open Settings"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="Yes, ILY 💗"
+            android:layout_weight="0.9"
             android:textColor="@color/white"
             android:layout_marginStart="16dp"
+            android:textStyle="bold"
             android:backgroundTint="@color/blue"/>
     </LinearLayout>
 </LinearLayout>
