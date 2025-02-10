@@ -74,7 +74,13 @@ class LeaderBoardListAdapter(userList: List<User>): RecyclerView.Adapter<LeaderB
             val profileFragment = ProfileFragment()
             val parentContext = holder.itemView.context
             val bundle = Bundle()
-            bundle.putString("roll_number", currentUser.roll_number)
+
+            if (currentUser.roll_number != parentContext.getSharedPreferences("user_data", 0).getString("rollNumber", "")) {
+                bundle.putString("roll_number", currentUser.roll_number)
+            }else{
+                bundle.putString("roll_number", "")
+            }
+
             profileFragment.arguments = bundle
             val fragmentManager = (parentContext as androidx.fragment.app.FragmentActivity).supportFragmentManager
             fragmentManager.beginTransaction()
