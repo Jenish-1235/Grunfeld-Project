@@ -72,6 +72,11 @@ class MainActivity : AppCompatActivity() ***REMOVED***
 
             if(!NotificationManagerCompat.from(this).areNotificationsEnabled() && !isNotificationDenied.getBoolean("isDenied", false))***REMOVED***
                 showNotificationDialog()
+                lifecycleScope.launch ***REMOVED***
+                    val githubProfile = sessionReloadAndUpdateProfile()
+                    bottomNavBar(githubProfile)
+                    updateTokenAfterLogin()
+        ***REMOVED***
     ***REMOVED***else ***REMOVED***
                 lifecycleScope.launch ***REMOVED***
                     val githubProfile = sessionReloadAndUpdateProfile()
@@ -269,15 +274,11 @@ class MainActivity : AppCompatActivity() ***REMOVED***
             .setView(dialogView)
             .create()
 
+        dialog.setCancelable(false)
         dialogView.findViewById<Button>(R.id.dialog_cancel).setOnClickListener ***REMOVED***
             dialog.dismiss()
             var isNotificationDenied = getSharedPreferences("isNotificationDenied", MODE_PRIVATE)
             isNotificationDenied.edit().putBoolean("isDenied", true).apply()
-            lifecycleScope.launch ***REMOVED***
-                val githubProfile = sessionReloadAndUpdateProfile()
-                bottomNavBar(githubProfile)
-                updateTokenAfterLogin()
-    ***REMOVED***
 ***REMOVED***
 
         dialogView.findViewById<Button>(R.id.dialog_settings).setOnClickListener ***REMOVED***
