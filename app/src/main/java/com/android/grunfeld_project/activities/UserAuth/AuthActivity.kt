@@ -168,8 +168,6 @@ class AuthActivity : AppCompatActivity() ***REMOVED***
         ***REMOVED***
             if (existingUser.data.length == 2) ***REMOVED***
                 supabaseClient.from("users").insert(newUserJson) ***REMOVED******REMOVED***
-    ***REMOVED***else***REMOVED***
-                showToast("User already exists")
     ***REMOVED***
 
 ***REMOVED*** catch (e: Exception) ***REMOVED***

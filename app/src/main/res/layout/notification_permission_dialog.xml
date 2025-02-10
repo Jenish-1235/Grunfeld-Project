@@ -7,13 +7,14 @@
     app:cardCornerRadius="20dp"
     android:layout_margin="15dp"
     app:cardBackgroundColor="@color/gray"
-    android:background="@android:color/transparent"
+    android:background="@color/gray"
     android:elevation="10dp">
 <LinearLayout
     android:id="@+id/dialog_layout_root"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
+    android:background="@color/gray"
     android:padding="15dp">
 
     <!-- Title -->
@@ -34,7 +35,7 @@
         android:id="@+id/dialog_message"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Turning on notifications is like saying 'I love you' in the digital world. 🥹💖 \n\nAnd right now… we’re waiting for you to say it. 😭💬"
+        android:text="Turning on notifications is like saying 'I love you' in the digital world. 🥹💖 \n\nAnd right now… we're waiting for you to say it. 😭💬"
         android:textColor="@color/white"
         android:textSize="15sp"
         android:paddingBottom="16dp"/>
@@ -53,8 +54,8 @@
             android:layout_height="match_parent"
             android:text="Go Away...😠"
             android:textColor="@color/white"
-            android:backgroundTint="@color/gray"
-            android:layout_weight="1.4"/>
+            android:backgroundTint="#373636"
+            android:layout_weight="1.3"/>
 
         <!-- Open Settings Button -->
         <Button
@@ -64,7 +65,7 @@
             android:text="Yes, ILY 💗"
             android:layout_weight="0.9"
             android:textColor="@color/white"
-            android:layout_marginStart="16dp"
+            android:layout_marginStart="7dp"
             android:textStyle="bold"
             android:backgroundTint="@color/blue"/>
     </LinearLayout>

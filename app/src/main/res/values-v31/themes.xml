@@ -1,6 +1,6 @@
-<resources xmlns:tools="http://schemas.android.com/tools"
-    xmlns:android="http://schemas.android.com/apk/res/android">
-    <!-- Base application theme. -->
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
     <style name="Base.Theme.GrunfeldProject" parent="Theme.Material3.Light.NoActionBar">
         <!-- Customize your light theme here. -->
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
@@ -8,16 +8,10 @@
         <item name="colorControlActivated">@color/white</item>
         <item name="colorControlHighlight">@color/white</item>
         <item name="android:windowBackground">#111111</item>
+        <item name="android:windowSplashScreenBackground">#111111</item>
         <!-- Set the status bar color to black -->
         <item name="android:statusBarColor">#000000</item>
         <!-- Ensure that the status bar icons and text are white -->
         <item name="android:windowLightStatusBar">false</item>
-    </style>
-
-    <style name="Theme.GrunfeldProject" parent="Base.Theme.GrunfeldProject" />
-
-    <style name="SearchBarTextAppearance" parent="TextAppearance.AppCompat.Body1">
-        <item name="android:textColor">@color/white</item>
-        <!-- You can add more text-related attributes here if needed -->
     </style>
 </resources>

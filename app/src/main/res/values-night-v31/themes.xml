@@ -1,5 +1,6 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
     <style name="Base.Theme.GrunfeldProject" parent="Theme.Material3.Light.NoActionBar">
         <!-- Customize your dark theme here. -->
         <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
@@ -7,11 +8,6 @@
         <item name="colorControlActivated">@color/white</item>
         <item name="colorControlHighlight">@color/white</item>
         <item name="android:windowBackground">#111111</item>
-    </style>
-
-    <style name="Theme.GrunfeldProject" parent="Base.Theme.GrunfeldProject" />
-    <style name="SearchBarTextAppearance" parent="TextAppearance.AppCompat.Body1">
-        <item name="android:textColor">@color/white</item>
-        <!-- You can add more text-related attributes here if needed -->
+        <item name="android:windowSplashScreenBackground">#000000</item>
     </style>
 </resources>
