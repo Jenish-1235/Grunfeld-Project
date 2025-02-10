@@ -78,7 +78,7 @@
                         android:textAlignment="center"
                         android:translationZ="1dp"
                         android:layout_weight="1"
-                        android:gravity="center"
+                        android:gravity="center|bottom"
                         android:textSize="16dp"
                         android:textStyle="bold"/>
                     <TextView
@@ -170,7 +170,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginTop="10dp"
-                    android:text="This is about for user."
+                    android:text="I am an Open Source Dev. #DEVTOSKY"
                     android:textColor="@color/white" />
 
             </LinearLayout>

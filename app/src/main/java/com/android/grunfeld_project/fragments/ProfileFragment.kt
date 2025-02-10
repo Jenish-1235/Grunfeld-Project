@@ -13,27 +13,27 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.android.grunfeld_project.BuildConfig
 import com.android.grunfeld_project.R
+import com.android.grunfeld_project.adapters.BadgeListAdapter
 import com.android.grunfeld_project.models.PexelsResponse
 import com.android.grunfeld_project.models.User
+import com.android.grunfeld_project.models.UserBadge
 import com.android.grunfeld_project.network.SupabaseClient.supabaseClient
 import com.bumptech.glide.Glide
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import io.github.jan.supabase.auth.SessionManager
 import io.github.jan.supabase.auth.auth
 import io.github.jan.supabase.postgrest.from
 import io.github.jan.supabase.postgrest.result.PostgrestResult
 import kotlinx.coroutines.launch
 import io.ktor.client.*
-import io.ktor.client.call.* // or another engine
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
-import io.ktor.client.plugins.contentnegotiation.*
-import io.ktor.serialization.kotlinx.json.*
-import kotlinx.serialization.json.Json
 
 
 class ProfileFragment : Fragment() {
@@ -43,11 +43,24 @@ class ProfileFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
+
         val view = inflater.inflate(R.layout.fragment_profile, container, false)
 
+        val bundle = arguments
+        lateinit var rollNumber: String
+        if (bundle != null) {
+            rollNumber = bundle.getString("roll_number").toString()
+        }else{
+            rollNumber = ""
+        }
+
+        lateinit var userProfile: Array<Any>
         lifecycleScope.launch {
-            val userProfile = loadSessionAndCurrentUser()
+            if (rollNumber != "") {
+                userProfile = loadSessionAndCurrentUser(rollNumber)
+            } else {
+                userProfile = loadSessionAndCurrentUser("")
+            }
             val nameView = view.findViewById<TextView>(R.id.nameView)
             val rankView = view.findViewById<TextView>(R.id.rankView)
             val pointsView = view.findViewById<TextView>(R.id.pointsView)
@@ -81,16 +94,45 @@ class ProfileFragment : Fragment() {
                 .into(bannerImageView)
         }
 
+        val badgeRecyclerView = view.findViewById<RecyclerView>(R.id.userBadgesRecyclerView)
+        lifecycleScope.launch {
+            if (rollNumber != "") {
+                userProfile = loadSessionAndCurrentUser(rollNumber)
+            } else {
+                userProfile = loadSessionAndCurrentUser("")
+            }
+            val userData: PostgrestResult = supabaseClient.from("user_badges").select {
+                filter {
+                    eq("roll_number", userProfile[2])
+                }
+            }
+            val badgeList = parseBadgeData(userData.data)
+            val adapter = BadgeListAdapter(badgeList)
+            badgeRecyclerView.adapter = adapter
+            badgeRecyclerView.layoutManager = GridLayoutManager(requireContext(), 2, LinearLayoutManager.VERTICAL, false)
+
+        }
 
         return view
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    private suspend fun loadSessionAndCurrentUser(): Array<Any> {
+    private suspend fun loadSessionAndCurrentUser(rollNumber:String): Array<Any> {
+
         val session = supabaseClient.auth.sessionManager.loadSession()
-        val userData: PostgrestResult = supabaseClient.from("users").select {
-            filter {
-                session?.user?.id?.let { eq("id", it) }
+        lateinit var userData: PostgrestResult
+        if (rollNumber != "") {
+            userData = supabaseClient.from("users").select {
+                filter {
+                    eq("roll_number", rollNumber)
+                }
+            }
+
+        }else {
+            userData = supabaseClient.from("users").select {
+                filter {
+                    session?.user?.id?.let { eq("id", it) }
+                }
             }
         }
         val fetchedUser = parseUserData(userData.data)
@@ -155,4 +197,12 @@ class ProfileFragment : Fragment() {
             client.close()
         }
     }
+
+    fun parseBadgeData(jsonString: String): List<UserBadge> {
+        val gson = Gson()
+        // Create a TypeToken for a List<User>
+        val userListType = object : TypeToken<List<UserBadge>>() {}.type
+        return gson.fromJson(jsonString, userListType)
+    }
+
 }
