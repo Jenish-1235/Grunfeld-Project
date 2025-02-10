@@ -151,26 +151,40 @@
                 android:orientation="vertical"
                 android:padding="10dp">
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="@android:color/transparent"
                     android:text="About"
+                    android:layout_weight="1"
                     android:textColor="@color/white"
                     android:textSize="18sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:drawableEnd="@drawable/ic_edit"
+                        android:id="@+id/userAboutEdit"/>
+                </LinearLayout>
 
                 <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="3dp"
-                    android:src="@color/white"/>
+                    android:src="@color/white"
+                    android:layout_marginTop="2dp"/>
 
                 <TextView
                     android:id="@+id/userAboutView"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginTop="10dp"
-                    android:text="I am an Open Source Dev. #DEVTOSKY"
+                    android:text=""
                     android:textColor="@color/white" />
 
             </LinearLayout>

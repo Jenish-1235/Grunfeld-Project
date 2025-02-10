@@ -10,20 +10,19 @@
 
 
 
-
-        <TextView
-            android:id="@+id/textView2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center_vertical"
-            android:text="Upcoming Events"
-            android:textColor="@color/white"
-            android:textSize="26dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+    <TextView
+        android:id="@+id/upcomingEventsTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="center_vertical"
+        android:text="Upcoming Events"
+        android:textColor="@color/white"
+        android:textSize="26dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/noClassesMessage"
@@ -34,9 +33,10 @@
         android:textColor="@color/white"
         android:textSize="18sp"
         android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView2" />
+        app:layout_constraintTop_toBottomOf="@+id/upcomingEventsTitle" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/dateSelectionRecyclerView"
@@ -46,10 +46,11 @@
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/noClassesMessage" />
+        app:layout_constraintTop_toBottomOf="@+id/upcomingEventsTitle"
+        android:layout_marginTop="7dp"/>
 
     <TextView
-        android:id="@+id/textView4"
+        android:id="@+id/scheduleTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Schedule"
@@ -67,7 +68,7 @@
         app:layout_constraintBottom_toTopOf="@+id/pastClassesButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView4" />
+        app:layout_constraintTop_toBottomOf="@+id/scheduleTitle" />
 
     <TextView
         android:id="@+id/pastClassesButton"

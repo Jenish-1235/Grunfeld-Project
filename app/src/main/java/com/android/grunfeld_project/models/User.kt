@@ -9,5 +9,6 @@ data class User(
     val points: Int = 0,         // Default points, e.g., 70 (if provided, else default 0)
     val profile_image: String,   // URL to the profile image
     val roll_number: String,     // e.g., "10140"
-    val username: String         // e.g., "Raam751" (or GitHub username)
+    val username: String,         // e.g., "Raam751" (or GitHub username)
+    var about:String
 )

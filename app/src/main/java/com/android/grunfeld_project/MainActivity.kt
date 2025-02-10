@@ -63,14 +63,20 @@ class MainActivity : AppCompatActivity() {
 
         val loginPrefs = getSharedPreferences("loginPrefs", MODE_PRIVATE)
         val isLoggedIn = loginPrefs.getBoolean("isLoggedIn", false)
+        val isNotificationDenied = getSharedPreferences("isNotificationDenied", MODE_PRIVATE)
 
         if (!isLoggedIn) {
             startActivity(Intent(this, AuthActivity::class.java))
             finish()
         }else{
 
-            if(!NotificationManagerCompat.from(this).areNotificationsEnabled()){
+            if(!NotificationManagerCompat.from(this).areNotificationsEnabled() && !isNotificationDenied.getBoolean("isDenied", false)){
                 showNotificationDialog()
+                lifecycleScope.launch {
+                    val githubProfile = sessionReloadAndUpdateProfile()
+                    bottomNavBar(githubProfile)
+                    updateTokenAfterLogin()
+                }
             }else {
                 lifecycleScope.launch {
                     val githubProfile = sessionReloadAndUpdateProfile()
@@ -176,6 +182,9 @@ class MainActivity : AppCompatActivity() {
                         devPostsTabIcon.imageTintList = getColorStateList(R.color.blue)
                     }
                     3 -> {
+
+                        val bundle = Bundle()
+                        bundle.putString("roll_number", "")
                         val profileFragment = ProfileFragment()
                         supportFragmentManager.beginTransaction()
                             .replace(R.id.fragment_container_view, profileFragment)
@@ -268,13 +277,11 @@ class MainActivity : AppCompatActivity() {
             .setView(dialogView)
             .create()
 
+        dialog.setCancelable(false)
         dialogView.findViewById<Button>(R.id.dialog_cancel).setOnClickListener {
             dialog.dismiss()
-            lifecycleScope.launch {
-                val githubProfile = sessionReloadAndUpdateProfile()
-                bottomNavBar(githubProfile)
-                updateTokenAfterLogin()
-            }
+            var isNotificationDenied = getSharedPreferences("isNotificationDenied", MODE_PRIVATE)
+            isNotificationDenied.edit().putBoolean("isDenied", true).apply()
         }
 
         dialogView.findViewById<Button>(R.id.dialog_settings).setOnClickListener {
@@ -291,6 +298,7 @@ class MainActivity : AppCompatActivity() {
 
         dialog.show()
     }
+
     private fun updateTokenAfterLogin() {
         FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
             if (!task.isSuccessful) {

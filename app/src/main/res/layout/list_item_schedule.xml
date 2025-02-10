@@ -24,8 +24,9 @@
             android:layout_height="match_parent"
             android:text="Title"
             android:textColor="@color/white"
-            android:textSize="24dp"
+            android:textSize="20dp"
             android:maxLength="20"
+            android:textStyle="bold"
             android:layout_weight="1"/>
 
 
@@ -36,7 +37,7 @@
             android:text="Instructor"
             android:textColor="#9CA3AF"
             android:layout_weight="1"
-            android:textSize="18dp"
+            android:textSize="16dp"
             android:maxLength="20"
             android:gravity="start|center_vertical"
             android:drawablePadding="5dp"
