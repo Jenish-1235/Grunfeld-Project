@@ -8,7 +8,7 @@
         <item name="colorControlActivated">@color/white</item>
         <item name="colorControlHighlight">@color/white</item>
         <item name="android:windowBackground">#111111</item>
-        <item name="android:windowSplashScreenBackground">#000000</item>
+        <item name="android:windowSplashScreenBackground">#111111</item>
 
     </style>
 
