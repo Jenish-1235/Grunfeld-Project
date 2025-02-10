@@ -100,7 +100,7 @@ class ScheduleFragment : Fragment() {
                         event.schedule_date == selectedDate
                     }
                     if (filteredEvents.isEmpty()) {
-                        Toast.makeText(requireContext(), "No classes scheduled on $selectedDate", Toast.LENGTH_SHORT).show()
+
                     }
                     eventRecyclerView.adapter = EventListAdapter(filteredEvents)
                 }
