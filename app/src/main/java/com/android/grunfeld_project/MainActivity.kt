@@ -182,6 +182,9 @@ class MainActivity : AppCompatActivity() ***REMOVED***
                         devPostsTabIcon.imageTintList = getColorStateList(R.color.blue)
             ***REMOVED***
                     3 -> ***REMOVED***
+
+                        val bundle = Bundle()
+                        bundle.putString("roll_number", "")
                         val profileFragment = ProfileFragment()
                         supportFragmentManager.beginTransaction()
                             .replace(R.id.fragment_container_view, profileFragment)

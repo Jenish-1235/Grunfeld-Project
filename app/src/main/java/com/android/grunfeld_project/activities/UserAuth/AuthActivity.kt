@@ -36,6 +36,7 @@ import kotlinx.coroutines.launch
 import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.jsonPrimitive
 import java.time.LocalDateTime
+import java.util.ConcurrentModificationException
 import java.util.UUID
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -152,7 +153,7 @@ class AuthActivity : AppCompatActivity() ***REMOVED***
             "lastlogin" to JsonPrimitive(loginDate)
         )
 
-        val userPrefs = getSharedPreferences("user_data", Context.MODE_PRIVATE)
+        val userPrefs = getSharedPreferences("user_data", MODE_PRIVATE)
         val editor = userPrefs.edit()
         editor.putString("username", githubUsername)
         editor.putString("rollNumber", rollNumber)

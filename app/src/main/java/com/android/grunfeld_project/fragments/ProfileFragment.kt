@@ -1,5 +1,7 @@
 package com.android.grunfeld_project.fragments
 
+import android.content.Context
+import android.content.Context.MODE_PRIVATE
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
@@ -120,6 +122,9 @@ class ProfileFragment : Fragment() ***REMOVED***
 
 
         val editAboutButton = view.findViewById<TextView>(R.id.userAboutEdit)
+        if (rollNumber != "") ***REMOVED***
+            editAboutButton.visibility = View.GONE
+***REMOVED***
 
         editAboutButton.setOnClickListener ***REMOVED***
             val aboutView = view.findViewById<TextView>(R.id.userAboutView)
@@ -173,7 +178,6 @@ class ProfileFragment : Fragment() ***REMOVED***
             rank = "Director"
 ***REMOVED***
         val githubUserName = fetchedUser[0].username.trim('"')
-        Log.d("About" , fetchedUser[0].about.toString());
         if(fetchedUser[0].about == null || fetchedUser[0].about == "" || fetchedUser[0].about == "NULL")***REMOVED***
             fetchedUser[0].about = "I Love Open Source Software... 💗💗💗"
 ***REMOVED***
