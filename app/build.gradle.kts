@@ -25,6 +25,7 @@ android {
         }
         buildConfigField("String", "BASE_URL", "\"${properties.getProperty("supabase.url")}\"")
         buildConfigField("String", "ANON_KEY", "\"${properties.getProperty("supabase.anon.key")}\"")
+        buildConfigField("String", "PEXEL_API_KEY", "\"${properties.getProperty("pexels.api.key")}\"")
     }
 
     buildTypes {
@@ -73,6 +74,8 @@ dependencies {
     implementation ("com.google.code.gson:gson:2.9.1")
     implementation(platform("com.google.firebase:firebase-bom:33.9.0"))
     implementation("com.google.firebase:firebase-analytics")
+    implementation("io.coil-kt:coil:2.3.0")       // or latest
+    implementation("io.coil-kt:coil-svg:2.3.0")
 
 
 }
