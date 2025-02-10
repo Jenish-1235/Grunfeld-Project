@@ -17,9 +17,11 @@ import android.widget.ImageView
 import androidx.activity.enableEdgeToEdge
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.WindowInsetsControllerCompat
 import androidx.lifecycle.lifecycleScope
 import com.android.grunfeld_project.activities.UserAuth.AuthActivity
 import com.android.grunfeld_project.fragments.DevPostsFragment
@@ -58,8 +60,15 @@ class MainActivity : AppCompatActivity() ***REMOVED***
             insets
 ***REMOVED***
 
-        window.statusBarColor = getColor(R.color.black)
-        window.navigationBarColor = getColor(R.color.black)
+        window.statusBarColor = Color.BLACK
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) ***REMOVED***
+            val decor = window.decorView
+            var flags = decor.systemUiVisibility
+            flags = flags and View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR.inv()
+            decor.systemUiVisibility = flags
+***REMOVED***
+        WindowInsetsControllerCompat(window, window.decorView).isAppearanceLightStatusBars = false
+
 
         val loginPrefs = getSharedPreferences("loginPrefs", MODE_PRIVATE)
         val isLoggedIn = loginPrefs.getBoolean("isLoggedIn", false)
