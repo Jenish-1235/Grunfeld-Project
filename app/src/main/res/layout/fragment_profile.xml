@@ -47,7 +47,7 @@
             android:layout_height="85dp"
             android:layout_marginStart="10dp"
             android:layout_marginEnd="10dp"
-            app:cardBackgroundColor="#CC1F2937"
+            app:cardBackgroundColor="#D91F2937"
             app:cardCornerRadius="20dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
