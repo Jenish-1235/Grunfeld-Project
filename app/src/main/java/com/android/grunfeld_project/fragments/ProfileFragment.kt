@@ -11,7 +11,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -67,6 +69,8 @@ class ProfileFragment : Fragment() {
             nameView.text = userProfile[1].toString()
             rankView.text = userProfile[3].toString()
             pointsView.text = userProfile[4].toString() + " Points"
+            val aboutView = view.findViewById<TextView>(R.id.userAboutView)
+            aboutView.text = userProfile[6].toString()
 
             val profileImage = view.findViewById<ImageView>(R.id.profileImage)
             Glide.with(requireContext())
@@ -113,6 +117,23 @@ class ProfileFragment : Fragment() {
 
         }
 
+
+        val editAboutButton = view.findViewById<TextView>(R.id.userAboutEdit)
+
+        editAboutButton.setOnClickListener {
+            val aboutView = view.findViewById<TextView>(R.id.userAboutView)
+            val aboutString = aboutView.text.toString()
+
+            val bundle = Bundle()
+            bundle.putString("about", aboutString)
+            bundle.putString("roll_number", userProfile[2].toString())
+            UpdateAboutDialog()
+
+        }
+
+
+
+
         return view
     }
 
@@ -151,9 +172,11 @@ class ProfileFragment : Fragment() {
             rank = "Director"
         }
         val githubUserName = fetchedUser[0].username.trim('"')
-
-
-        return arrayOf(githubProfileUrl, nameString, rollNumberString, rank, pointsInt, githubUserName)
+        Log.d("About" , fetchedUser[0].about.toString());
+        if(fetchedUser[0].about == null || fetchedUser[0].about == "" || fetchedUser[0].about == "NULL"){
+            fetchedUser[0].about = "I Love Open Source Software... 💗💗💗"
+        }
+        return arrayOf(githubProfileUrl, nameString, rollNumberString, rank, pointsInt, githubUserName, fetchedUser[0].about)
     }
 
     fun parseUserData(jsonString: String): List<User> {
@@ -203,6 +226,39 @@ class ProfileFragment : Fragment() {
         // Create a TypeToken for a List<User>
         val userListType = object : TypeToken<List<UserBadge>>() {}.type
         return gson.fromJson(jsonString, userListType)
+    }
+
+    fun UpdateAboutDialog(){
+        val updateAboutDialogView = layoutInflater.inflate(R.layout.update_about_dialog, null)
+        val dialog = AlertDialog.Builder(requireContext())
+            .setView(updateAboutDialogView)
+            .create()
+
+        dialog.setCancelable(false)
+        updateAboutDialogView.findViewById<TextView>(R.id.dialog_cancel).setOnClickListener {
+            dialog.dismiss()
+        }
+
+        updateAboutDialogView.findViewById<TextView>(R.id.save_about).setOnClickListener {
+            val aboutView = updateAboutDialogView.findViewById<TextView>(R.id.userAboutView)
+            val aboutString = aboutView?.text.toString()
+            lifecycleScope.launch {
+                val session = supabaseClient.auth.sessionManager.loadSession()
+                supabaseClient.from("users").update(
+                    mapOf("about" to aboutString)
+                ) {
+                    filter {
+                        session?.user?.id?.let { eq("id", it) }
+                    }
+                }
+
+                val aboutView = view?.findViewById<TextView>(R.id.userAboutView)
+                aboutView?.text = aboutString
+                dialog.dismiss()
+
+            }
+        }
+        dialog.show()
     }
 
 }
